@@ -108,3 +108,4 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 
 	list(par = par_hist, accept = accept_grp / R)
 }
+
