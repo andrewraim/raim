@@ -3,7 +3,10 @@
 #' This code was originally adapted from \code{rwmetrop} function in the
 #' \code{LearnBayes} package
 #'
+#' @param init 
+#' @param log_post 
 #' @param proposal_var 
+#' @param control 
 #' @param proposal_scale 
 #' @param R 
 #' @param grp 
@@ -11,10 +14,17 @@
 #' @param thin 
 #' @param report_period 
 #'
-#' @return
+#' @returns A list with the following elements
+#' \itemize{
+#' \item{par}{Matrix of draws where the \eqn{q} columns correspond to the
+#' parameters of \code{log_post}}
+#' \item{accept}{Vector of acceptance rates for the groups defined in in
+#' \code{grp}}
+#' }
 #'
 #' @name mh_rw
 #' @examples
+#' # TBD
 NULL
 
 #' @export
