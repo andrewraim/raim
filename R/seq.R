@@ -8,3 +8,4 @@ seq_along_dim = function(x, d)
 {
 	seq_len(dim(x)[d])
 }
+

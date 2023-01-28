@@ -12,7 +12,8 @@ rqres(y, p_dist, eps = 1e-06)
 \item{p_dist}{A cumulative distribution function. Typically the CDF of a
 fitted model with with parameters evaluated at  estimates.}
 
-\item{eps}{A small positive number needed for discrete distributions}
+\item{eps}{A small positive number needed for discrete distributions.
+Set to zero to avoid using random jitter.}
 }
 \value{
 Vector of residuals

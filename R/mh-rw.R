@@ -1,7 +1,7 @@
 #' Random Walk Metropolis-Hastings with Gaussian Proposal
 #' 
 #' This code was originally adapted from \code{rwmetrop} function in the
-#' \code{LearnBayes} package
+#' \code{LearnBayes} package.
 #'
 #' @param init 
 #' @param log_post 
@@ -67,37 +67,38 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 	}
 	accept_grp = rep(0, G)
 
-	R_keep = ceiling((R - burn) / thin)
 	idx_keep = 0
+	R_keep = ceiling((R - burn) / thin)
 	par_hist = matrix(NA, R_keep, q)
 
 	b = init
-	logfb = log_post(b)
-	V_chol = proposal$scale * t(chol(proposal$var))
+	logpb = log_post(b)
+	V_chol = t(chol(proposal_scale * proposal_var))
 
 	for (r in 1:R) {
+		# Draw the jump sizes and uniforms for all groups
 		bc = rmvnorm_chol(1, numeric(q), V_chol)
+		u = runif(G)
 
 		for (g in 1:G) {
+			# b_ is the proposed draw for the g-th group
 			idx_grp = grp_list[[g]]
 			b_ = b
 			b_[idx_grp] = b_[idx_grp] + bc[idx_grp]
 
-			log_alpha = log_post(b_, Data) - logfb
-			if (!is.na(log_alpha)) {
-				if (log(runif(1)) < log_alpha) {
-					b[idx_grp] = b_[idx_grp]
-					accept_grp[g] = accept_grp[g] + 1
-					logfb = log_post(b, Data)
-				}
-			} else {
+			log_alpha = log_post(b_) - logpb	
+			if (is.na(log_alpha)) {
 				warning("log_alpha = NA")
+			} else if (log(u[g]) < log_alpha) {
+				b[idx_grp] = b_[idx_grp]
+				accept_grp[g] = accept_grp[g] + 1
+				logpb = log_post(b)
 			}
 		}
 
 		if (r > burn && r %% thin == 0) {
 			idx_keep = idx_keep + 1
-			par_hist[idx_sample,] = b
+			par_hist[idx_keep,] = b
 		}
 
 		if (r %% report_period == 0) {

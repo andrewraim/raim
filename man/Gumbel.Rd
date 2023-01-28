@@ -3,9 +3,18 @@
 \name{Gumbel}
 \alias{Gumbel}
 \alias{rgumbel}
+\alias{dgumbel}
+\alias{pgumbel}
+\alias{qgumbel}
 \title{Gumbel Distribution}
 \usage{
 rgumbel(n, mu = 0, sigma = 1)
+
+dgumbel(x, mu = 0, sigma = 1, log = FALSE)
+
+pgumbel(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+
+qgumbel(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 }
 \arguments{
 \item{n}{Number of desired draws}
@@ -13,6 +22,19 @@ rgumbel(n, mu = 0, sigma = 1)
 \item{mu}{Location parameter}
 
 \item{sigma}{Scale parameter}
+
+\item{x}{Vector of quantiles}
+
+\item{log}{Logical; if TRUE, probabilities p are given as log(p)}
+
+\item{q}{Vector of quantiles}
+
+\item{lower.tail}{Logical; if \code{TRUE} (default), probabilities are
+\eqn{P[X \leq x]} otherwise, \eqn{P[X > x]}.}
+
+\item{log.p}{Logical; if TRUE, probabilities p are given as log(p)}
+
+\item{p}{Vector of probabilities}
 }
 \value{
 A vector of draws

@@ -35,7 +35,7 @@ parameters of \code{log_post}}
 }
 \description{
 This code was originally adapted from \code{rwmetrop} function in the
-\code{LearnBayes} package
+\code{LearnBayes} package.
 }
 \examples{
 # TBD

@@ -1,4 +1,3 @@
-#  Set eps to zero to avoid using random jitter
 #' Randomized Quantile Residuals
 #' 
 #' Compute randomized quantile residuals (Dunn & Smyth, 1996).
@@ -6,7 +5,8 @@
 #' @param y Vector of univariate observations
 #' @param p_dist A cumulative distribution function. Typically the CDF of a
 #' fitted model with with parameters evaluated at  estimates.
-#' @param eps A small positive number needed for discrete distributions
+#' @param eps A small positive number needed for discrete distributions.
+#' Set to zero to avoid using random jitter.
 #'
 #' @return Vector of residuals
 #' 
@@ -31,3 +31,4 @@ rqres = function(y, p_dist, eps = 1e-6)
 	u = runif(n, min = FL, max = FU)
 	qnorm(u)
 }
+

@@ -37,3 +37,4 @@ r_categ_mat = function(P)
 	Z = matrix(rgumbel(n*k), n, k)
 	max.col(Z + log(P))
 }
+
