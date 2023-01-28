@@ -1,13 +1,21 @@
 #' Dirichlet Distribution
 #' 
-#' Functions for the Dirichlet distribution
+#' Functions for the Dirichlet distribution on the \eqn{k} dimensional
+#' probability simplex.
 #' 
 #' @param n Number of desired draws
 #' @param x A value in the sample space
 #' @param alpha Vector of eqn{k} rate parameters
+#' @param log If \code{TRUE} return the log-density
 #' 
 #' @return A vector of draws
-#'
+#' 
+#' @details
+#' We assume Dirichlet distribution with density
+#' \deqn{
+#' f(x) = \frac{x_1^{\alpha_1-1} \cdots x_k^{\alpha_k-1}}{B(\bm{\alpha})}.
+#' }
+#' 
 #' @name Dirichlet 
 NULL
 
@@ -18,16 +26,12 @@ ddirichlet = function(x, alpha, log = FALSE)
 	x = as.matrix(x)
 	n = nrow(x)
 	k = ncol(x)
-	stopifnot(k == ncol(alpha))
+	stopifnot(k == length(alpha))
+	logf = rep(lgamma(sum(alpha)) - sum(lgamma(alpha)), n)
 
-	log_f = lgamma(sum(alpha)) - sum(lgamma(alpha)) +
-		rowSums((alpha-1) * log(x))
-
-	# All of the values outside of Dirichlet sample space will now
-	# have log_f = NaN, so convert them to -Inf. It might be better to
-	# check the sample space purposefully though...
-	idx = which(is.nan(log_f))
-	log_f[idx] = -Inf
+	for (j in 1:k) {
+		logf = logf + (alpha[j]-1)*x[,j]
+	}
 
 	ifelse (log, log_f, exp(log_f))
 }

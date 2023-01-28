@@ -2,6 +2,9 @@
 #'
 #' @param optim_method 
 #' @param optim_control 
+#' @param tx 
+#' @param jacobian 
+#' @param labels 
 #'
 #' @name mle_optim
 NULL
@@ -18,7 +21,7 @@ mle_optim_control = function(optim_method = "L-BFGS-B", optim_control = list())
 
 #' @name mle_optim
 #' @export
-mle_optim = function(init, loglik, n, df = n, control = mle_optim_control())
+mle_optim = function(init, loglik, n = NA, df = Inf, control = mle_optim_control())
 {
 	start_time = Sys.time()
 	stopifnot(class(control) == "mle_optim_control")
@@ -52,18 +55,22 @@ mle_optim = function(init, loglik, n, df = n, control = mle_optim_control())
 
 #' @name mle_optim
 #' @export
-mle_transform = function(object, tx, labels = NULL)
+mle_transform = function(object, tx, jacobian = NULL)
 {
-	# TBD: do any additional transformations here
-	# Do we want tx to return a vector or a list?
-
 	par = object$par
 	V_par = object$vcov
 
 	par_tx = tx(par)
-	J_tx = numDeriv::jacobian(tx, par)
+	if (is.null(jacobian)) {
+		J_tx = numDeriv::jacobian(tx, par)
+	} else {
+		stopifnot(nrow(jac_tx) == length(par_tx))
+		stopifnot(ncol(jac_tx) == length(par))
+		J_tx = jacobian
+	}
 	V_tx = J_tx %*% V_par %*% t(J_tx)
 
+	labels = names(par_tx)
 	if (is.null(labels)) {
 		labels = sprintf("tx%d", seq_along(par_tx))
 	}
@@ -215,13 +222,10 @@ print.mle_result = function(x, ...)
 {
 	printf("MLE Optim Fit\n")
 
-	dim_theta = length(unlist(x$theta_hat))
-	dim_xi = length(unlist(x$xi_hat))
-
 	par = x$par
 	se = sqrt(diag(x$vcov))
 	tval = par / se
-	pval = 2 * pt(abs(tval), df = df, lower.tail = FALSE)
+	pval = 2 * pt(abs(tval), df = x$df, lower.tail = FALSE)
 	gr = x$gr
 
 	DF = data.frame(par = par, se = se, tval = tval, pval = pval, gr = gr)
@@ -237,11 +241,12 @@ print.mle_result = function(x, ...)
 	msg = x$optim_res$message
 	printf("---\n")
 	printf("Elapsed Sec: %0.2f   ", x$elapsed_sec)
-	printf("Degrees of freedom: %d\n", x$df)
+	printf("Converged status: %d\n", x$optim_res$convergence)
 	printf("LogLik: %0.4f   ", logLik(x))
 	printf("AIC: %0.4f   ", AIC(x))
 	printf("BIC: %0.4f\n", BIC(x))
-	printf("Converged status: %d   ", x$optim_res$convergence)
+	printf("Specified sample size: %0.0f  ", x$n)
+	printf("Degrees of freedom: %0.0f\n", x$df)
 }
 
 #' @name mle_optim

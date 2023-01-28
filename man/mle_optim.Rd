@@ -20,9 +20,9 @@
 \usage{
 mle_optim_control(optim_method = "L-BFGS-B", optim_control = list())
 
-mle_optim(init, loglik, n, df = n, control = mle_optim_control())
+mle_optim(init, loglik, n = NA, df = Inf, control = mle_optim_control())
 
-mle_transform(object, tx, labels = NULL)
+mle_transform(object, tx, jacobian = NULL)
 
 \method{print}{mle_transform_result}(x, ...)
 
@@ -52,6 +52,12 @@ mle_transform(object, tx, labels = NULL)
 \item{optim_method}{}
 
 \item{optim_control}{}
+
+\item{tx}{}
+
+\item{jacobian}{}
+
+\item{labels}{}
 }
 \description{
 MLE Optimization
