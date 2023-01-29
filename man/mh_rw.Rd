@@ -4,7 +4,8 @@
 \alias{mh_rw}
 \alias{mh_rw_control}
 \alias{print.mh_rw_result}
-\alias{mh_rw_transform}
+\alias{txform.mh_rw_result}
+\alias{print.txform_mh_rw_result}
 \title{Random Walk Metropolis-Hastings with Gaussian Proposal}
 \usage{
 mh_rw_control(
@@ -20,28 +21,39 @@ mh_rw(init, log_post, proposal_var, control = mh_rw_control())
 
 \method{print}{mh_rw_result}(x, ...)
 
-mh_rw_transform(object, tx)
+\method{txform}{mh_rw_result}(object, tx, ...)
+
+\method{print}{txform_mh_rw_result}(x, ...)
 }
 \arguments{
-\item{proposal_scale}{}
+\item{proposal_scale}{A scalar multiple applied to \code{proposal_var}}
 
-\item{R}{}
+\item{R}{Length of requested chain}
 
-\item{grp}{}
+\item{grp}{Vector of integers specifying grouping of elements of \eqn{\phi}.
+See details.}
 
-\item{burn}{}
+\item{burn}{Number of initial draws to burn / discard}
 
-\item{thin}{}
+\item{thin}{Thinning factor; the period for saving draws}
 
-\item{report_period}{}
+\item{report_period}{Period for reporting MCMC progress}
 
-\item{init}{}
+\item{init}{Initial value of \eqn{\phi} for the sampler}
 
-\item{log_post}{}
+\item{log_post}{Log-posterior function of \eqn{\phi} with target distribution}
 
-\item{proposal_var}{}
+\item{proposal_var}{Variance matrix of proposal distribution}
 
-\item{control}{}
+\item{control}{An object created via \code{mh_rw_control}}
+
+\item{x}{Object to print}
+
+\item{...}{Additional arguments}
+
+\item{object}{Result of \code{mh_rw} or \code{txform}}
+
+\item{tx}{A transformation of the parameter \eqn{\phi}}
 }
 \value{
 A list with the following elements
@@ -55,6 +67,9 @@ parameters of \code{log_post}}
 \description{
 This code was originally adapted from \code{rwmetrop} function in the
 \code{LearnBayes} package.
+}
+\details{
+TBD: describe \code{grp}, proposal, \code{log_post}.
 }
 \examples{
 # TBD

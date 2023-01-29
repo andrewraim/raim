@@ -1,11 +1,22 @@
 #' MLE Optimization
 #'
-#' @param optim_method 
-#' @param optim_control 
-#' @param tx 
-#' @param jacobian 
-#' @param labels 
-#'
+#' @param init Initial value of \eqn{\phi} for the sampler
+#' @param loglik Log-likelihood function of \eqn{\phi}
+#' @param n Sample size. Needed for AIC, BIC and some other optional results
+#' @param df Degrees of freedom to use for tests. Default value \code{Inf}
+#' assumes a large sample Normal distribution.
+#' @param control Object created via \code{mle_optim_control}
+#' @param optim_method A \code{method} argument to pass to \code{optim}
+#' @param optim_control A \code{control} argument to pass to \code{optim}
+#' @param tx A transformation of the parameter \eqn{\phi}
+#' @param jacobian  
+#' @param object Result of \code{mle_optim} or \code{txform}
+#' @param x 
+#' @param parm 
+#' @param level 
+#' @param k 
+#' @param ... Additional arguments
+#' 
 #' @name mle_optim
 NULL
 
@@ -55,10 +66,8 @@ mle_optim = function(init, loglik, n = NA, df = Inf, control = mle_optim_control
 
 #' @name mle_optim
 #' @export
-mle_transform = function(object, tx, jacobian = NULL)
+txform.mle_result = function(object, tx, jacobian = NULL, ...)
 {
-	stopifnot(class(object) == "mle_result")
-
 	par = object$par
 	V_par = object$vcov
 
@@ -80,13 +89,13 @@ mle_transform = function(object, tx, jacobian = NULL)
 	rownames(V_tx) = colnames(V_tx) = labels
 
 	res = list(par = par_tx, vcov = V_tx)
-	class(res) = "mle_transform_result"
+	class(res) = "txform_mle_result"
 	return(res)
 }
 
 #' @name mle_optim
 #' @export
-print.mle_transform_result = function(x, ...)
+print.txform_mle_result = function(x, ...)
 {
 	printf("MLE Optim: Transformed Parameters\n")
 

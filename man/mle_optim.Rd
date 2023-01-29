@@ -3,8 +3,8 @@
 \name{mle_optim}
 \alias{mle_optim}
 \alias{mle_optim_control}
-\alias{mle_transform}
-\alias{print.mle_transform_result}
+\alias{txform.mle_result}
+\alias{print.txform_mle_result}
 \alias{coef.mle_transform_result}
 \alias{vcov.mle_transform_result}
 \alias{confint.mle_result}
@@ -22,9 +22,9 @@ mle_optim_control(optim_method = "L-BFGS-B", optim_control = list())
 
 mle_optim(init, loglik, n = NA, df = Inf, control = mle_optim_control())
 
-mle_transform(object, tx, jacobian = NULL)
+\method{txform}{mle_result}(object, tx, jacobian = NULL, ...)
 
-\method{print}{mle_transform_result}(x, ...)
+\method{print}{txform_mle_result}(x, ...)
 
 \method{coef}{mle_transform_result}(object, ...)
 
@@ -49,15 +49,36 @@ mle_transform(object, tx, jacobian = NULL)
 \method{vcov}{mle_result}(object, ...)
 }
 \arguments{
-\item{optim_method}{}
+\item{optim_method}{A \code{method} argument to pass to \code{optim}}
 
-\item{optim_control}{}
+\item{optim_control}{A \code{control} argument to pass to \code{optim}}
 
-\item{tx}{}
+\item{init}{Initial value of \eqn{\phi} for the sampler}
+
+\item{loglik}{Log-likelihood function of \eqn{\phi}}
+
+\item{n}{Sample size. Needed for AIC, BIC and some other optional results}
+
+\item{df}{Degrees of freedom to use for tests. Default value \code{Inf}
+assumes a large sample Normal distribution.}
+
+\item{control}{Object created via \code{mle_optim_control}}
+
+\item{object}{Result of \code{mle_optim} or \code{txform}}
+
+\item{tx}{A transformation of the parameter \eqn{\phi}}
 
 \item{jacobian}{}
 
-\item{labels}{}
+\item{...}{Additional arguments}
+
+\item{x}{}
+
+\item{parm}{}
+
+\item{level}{}
+
+\item{k}{}
 }
 \description{
 MLE Optimization

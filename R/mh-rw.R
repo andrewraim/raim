@@ -3,16 +3,21 @@
 #' This code was originally adapted from \code{rwmetrop} function in the
 #' \code{LearnBayes} package.
 #'
-#' @param init 
-#' @param log_post 
-#' @param proposal_var 
-#' @param control 
-#' @param proposal_scale 
-#' @param R 
-#' @param grp 
-#' @param burn 
-#' @param thin 
-#' @param report_period 
+#' @param init Initial value of \eqn{\phi} for the sampler
+#' @param log_post Log-posterior function of \eqn{\phi} with target distribution
+#' @param proposal_var Variance matrix of proposal distribution
+#' @param control An object created via \code{mh_rw_control}
+#' @param proposal_scale A scalar multiple applied to \code{proposal_var}
+#' @param grp Vector of integers specifying grouping of elements of \eqn{\phi}.
+#' See details.
+#' @param R Length of requested chain
+#' @param burn Number of initial draws to burn / discard
+#' @param thin Thinning factor; the period for saving draws
+#' @param report_period Period for reporting MCMC progress
+#' @param tx A transformation of the parameter \eqn{\phi}
+#' @param ... Additional arguments
+#' @param x Object to print
+#' @param object Result of \code{mh_rw} or \code{txform}
 #'
 #' @returns A list with the following elements
 #' \itemize{
@@ -21,6 +26,9 @@
 #' \item{accept}{Vector of acceptance rates for the groups defined in in
 #' \code{grp}}
 #' }
+#' 
+#' @details 
+#' TBD: describe \code{grp}, proposal, \code{log_post}.
 #'
 #' @name mh_rw
 #' @examples
@@ -63,6 +71,7 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 	if (is.null(grp)) {
 		grp = rep(1, q)
 	}
+	stopifnot(length(grp) == q)
 	
 	# Make a list of indices for each group
 	grp_list = list()
@@ -115,16 +124,18 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 			lp_hist[idx_keep] = logpb
 		}
 
-		if (r %% report_period == 0) {
+		if (r %% report_period == 0 && G > 1) {
 			acc = paste(sprintf("%0.02f", accept_grp / r * 100), collapse = ", ")
 			logger("After %d rep, accept%% {%s}\n", r, acc)
+		} else if (r %% report_period == 0 && G == 1) {
+			logger("After %d rep, accept%% %0.02f\n", r, accept_grp / r * 100)
 		}
 	}
 
 	elapsed_sec = as.numeric(Sys.time() - start_time, "secs")
 
 	out = list(par_hist = par_hist, lp_hist = lp_hist, accept = accept_grp / R,
-		grp = grp, elapsed_sec = elapsed_sec)
+		grp = grp, elapsed_sec = elapsed_sec, R = R, burn = burn, thin = thin)
 	class(out) = "mh_rw_result"
 	return(out)
 }
@@ -137,21 +148,26 @@ print.mh_rw_result = function(x, ...)
 
 	printf("--- Parameters ---\n")
 	par_mcmc = x$par_hist
+	G = length(table(x$grp))
 
 	DF = data.frame(
 		mean = colMeans(par_mcmc),
 		sd = apply(par_mcmc, 2, sd),
 		lo = apply(par_mcmc, 2, quantile, prob = 0.025),
-		hi = apply(par_mcmc, 2, quantile, prob = 0.975),
-		grp = x$grp,
-		accept = x$accept[x$grp] * 100
+		mid = apply(par_mcmc, 2, quantile, prob = 0.5),
+		hi = apply(par_mcmc, 2, quantile, prob = 0.975)
 	)
 	rownames(DF) = colnames(par_mcmc)
-	colnames(DF) = c("Mean", "SD", "2.5%", "97.5%", "Group", "Accept%")
-	DF[,1] = round(DF[,1], 4)
-	DF[,2] = round(DF[,2], 4)
-	DF[,3] = round(DF[,3], 4)
-	DF[,4] = round(DF[,3], 4)
+	colnames(DF) = c("Mean", "SD", "2.5%", "50%", "97.5%")
+	DF = round(DF, 4)
+
+	if (G > 1) {
+		# If more than one group was defined, report group memberships and
+		# acceptance rates as columns in the table.
+		DF$`Group` = x$grp
+		DF$`Accept%` = x$accept[x$grp] * 100
+	}
+
 	print(DF)
 	
 	printf("--- Log-Posterior ---\n")
@@ -161,31 +177,55 @@ print.mh_rw_result = function(x, ...)
 		mean = mean(lp_mcmc),
 		sd = sd(lp_mcmc),
 		lo = quantile(lp_mcmc, prob = 0.025),
+		mid = quantile(lp_mcmc, prob = 0.5),
 		hi = quantile(lp_mcmc, prob = 0.975)
 	)
 	rownames(DF) = "lp"
-	colnames(DF) = c("Mean", "SD", "2.5%", "97.5%")
-	DF[,1] = round(DF[,1], 4)
-	DF[,2] = round(DF[,2], 4)
-	DF[,3] = round(DF[,3], 4)
-	DF[,4] = round(DF[,3], 4)
+	colnames(DF) = c("Mean", "SD", "2.5%", "50%", "97.5%")
+	DF = round(DF, 4)
 	print(DF)
 
 	printf("---\n")
-	printf("Elapsed Sec: %0.2f   ", x$elapsed_sec)
+
+	printf("Chain Length: %d  Burn: %d  Thin: %d  Saved Draws: %d\n", x$R,
+		x$burn, x$thin, nrow(par_mcmc))
+
+	printf("Elapsed Sec: %0.2f", x$elapsed_sec)
+	if (G == 1) {
+		# If one group was defined, report global acceptance rate here.
+		printf("  Accept%%: %0.2f", x$accept * 100)
+	}
+	printf("\n")
 }
 
 #' @name mh_rw
 #' @export
-mh_rw_transform = function(object, tx)
+txform.mh_rw_result = function(object, tx, ...)
 {
-	stopifnot(class(object) == "mh_rw_result")
-
 	par_mcmc = object$par_hist
-	tx_mcmc = apply(par_mcmc, 1, tx)
-	stop("Keep working here!! Also make a print function for this!!")
-
-	out = list(par = par_tx, vcov = V_tx)
-	class(out) = "mh_rw_transform_result"
+	out = t(apply(par_mcmc, 1, tx))
+	class(out) = "txform_mh_rw_result"
 	return(out)
+}
+
+#' @name mh_rw
+#' @export
+print.txform_mh_rw_result = function(x, ...)
+{
+	printf("Metropolis-Hastings Random Walk: Transformed Parameters\n")
+
+	DF = data.frame(
+		mean = colMeans(x),
+		sd = apply(x, 2, sd),
+		lo = apply(x, 2, quantile, prob = 0.025),
+		mid = apply(x, 2, quantile, prob = 0.5),
+		hi = apply(x, 2, quantile, prob = 0.975)
+	)
+	rownames(DF) = colnames(x)
+	colnames(DF) = c("Mean", "SD", "2.5%", "50%", "97.5%")
+	DF = round(DF, 4)
+	print(DF)
+
+	printf("---\n")
+	printf("Saved Draws: %d\n", nrow(x))
 }

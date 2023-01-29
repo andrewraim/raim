@@ -24,7 +24,7 @@ Compute randomized quantile residuals (Dunn & Smyth, 1996).
 \examples{
 mu_true = 10
 y = rpois(200, mu_true)
-mu_hat = mean(x)
+mu_hat = mean(y)
 p_dist = function(x) { ppois(y, mu_hat) }
 res = rqres(y, p_dist)
 
