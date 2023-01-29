@@ -15,11 +15,20 @@ rdirichlet(n, alpha)
 
 \item{alpha}{Vector of eqn{k} rate parameters}
 
+\item{log}{If \code{TRUE} return the log-density}
+
 \item{n}{Number of desired draws}
 }
 \value{
 A vector of draws
 }
 \description{
-Functions for the Dirichlet distribution
+Functions for the Dirichlet distribution on the \eqn{k} dimensional
+probability simplex.
+}
+\details{
+We assume Dirichlet distribution with density
+\deqn{
+f(x) = \frac{x_1^{\alpha_1-1} \cdots x_k^{\alpha_k-1}}{B(\bm{\alpha})}.
+}
 }

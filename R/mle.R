@@ -57,6 +57,8 @@ mle_optim = function(init, loglik, n = NA, df = Inf, control = mle_optim_control
 #' @export
 mle_transform = function(object, tx, jacobian = NULL)
 {
+	stopifnot(class(object) == "mle_result")
+
 	par = object$par
 	V_par = object$vcov
 
@@ -112,7 +114,6 @@ vcov.mle_transform_result = function(object, ...)
 {
 	object$vcov
 }
-
 
 mle_old = function(phi_init, loglik, n, df = n, theta_tx = identity, extra_tx,
 	psi_names = NULL, control = mle_control())

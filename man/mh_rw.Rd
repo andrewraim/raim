@@ -2,16 +2,27 @@
 % Please edit documentation in R/mh-rw.R
 \name{mh_rw}
 \alias{mh_rw}
+\alias{mh_rw_control}
+\alias{print.mh_rw_result}
+\alias{mh_rw_transform}
 \title{Random Walk Metropolis-Hastings with Gaussian Proposal}
+\usage{
+mh_rw_control(
+  proposal_scale = 1,
+  R = 1000,
+  grp = NULL,
+  burn = 0,
+  thin = 1,
+  report_period = R + 1
+)
+
+mh_rw(init, log_post, proposal_var, control = mh_rw_control())
+
+\method{print}{mh_rw_result}(x, ...)
+
+mh_rw_transform(object, tx)
+}
 \arguments{
-\item{init}{}
-
-\item{log_post}{}
-
-\item{proposal_var}{}
-
-\item{control}{}
-
 \item{proposal_scale}{}
 
 \item{R}{}
@@ -23,6 +34,14 @@
 \item{thin}{}
 
 \item{report_period}{}
+
+\item{init}{}
+
+\item{log_post}{}
+
+\item{proposal_var}{}
+
+\item{control}{}
 }
 \value{
 A list with the following elements
