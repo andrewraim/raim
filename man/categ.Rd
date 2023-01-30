@@ -6,14 +6,17 @@
 \alias{r_categ_mat}
 \title{Categorical Distribution}
 \usage{
-r_categ(n, p)
+r_categ(n, p, log_p = FALSE)
 
-r_categ_mat(P)
+r_categ_mat(P, log_p = FALSE)
 }
 \arguments{
 \item{n}{Number of desired draws}
 
 \item{p}{A \eqn{k}-dimensional vector of probabilities}
+
+\item{log_p}{If \code{TRUE}, interpret given probabilities as having been
+supplied on the log-scale. Otherwise, interpret them on the original scale.}
 
 \item{P}{An \eqn{n \times k} matrix of probabilities, where \eqn{k} is
 the number of categories and \eqn{n} is the desired number of independent
