@@ -10,13 +10,13 @@
 #' @param log_p If \code{TRUE}, interpret given probabilities as having been
 #' supplied on the log-scale. Otherwise, interpret them on the original scale.
 #' 
-#' @returns a vector of category zero-based indices whose elements are in
-#' \eqn{0, \ldots, k-1}.
+#' @returns a vector of category indices whose elements are in
+#' \eqn{1, \ldots, k}.
 #' 
 #' @details
-#' It might be more useful to have a version of this function that takes
-#' probabilities on the log-scale. We could consider using the Gumbel trick
-#' for that.
+#' We make use of the Gumbel trick to draw from probabilities given on the
+#' log-scale without having to normalize. Note that \code{r_categ} can be slow
+#' with large \code{n} because it runs in a loop in plain R.
 #' 
 #' @name categ
 NULL
@@ -26,8 +26,15 @@ NULL
 r_categ = function(n, p, log_p = FALSE)
 {
 	k = length(p)
-	P = matrix(p, n, k, byrow = TRUE)
-	r_categ_mat(P, log_p = log_p)
+	lp = switch(log_p, "TRUE" = p, log(p))
+	out = numeric(n)
+
+	for (i in 1:n) {
+		z = rgumbel(k)
+		out[i] = which.max(z + lp)
+	}
+
+	return(out)
 }
 
 #' @name categ
