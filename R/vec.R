@@ -14,7 +14,7 @@ seq_along_dim = function(x, d)
 #' @param j Position of one
 #' @param n Dimension of vector
 #' 
-#' @returns
+#' @return
 #' An \eqn{n} dimensional vector with a one in the \eqn{j}th position and zeros
 #' in other positions.
 #'
@@ -26,3 +26,20 @@ unitvec = function(j, n)
 	x[j] = 1
 	return(x)
 }
+
+#' "Not In" Operator
+#' 
+#' @param x Vector or NULL: the values to be matched. Long vectors are
+#' supported.
+#' @param table Vector or NULL: the values to be matched against. Long vectors
+#' are not supported.
+#' 
+#' @return
+#' The negation of the \code{%in%} operator.
+#'
+#' @export
+`%notin%` = function(x, table)
+{
+	!(x %in% table)
+}
+
