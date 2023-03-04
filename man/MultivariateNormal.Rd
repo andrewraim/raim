@@ -2,25 +2,25 @@
 % Please edit documentation in R/mvnorm.R
 \name{MultivariateNormal}
 \alias{MultivariateNormal}
-\alias{rmvnorm}
-\alias{rmvnorm_chol}
-\alias{rmvnorm_prec}
+\alias{r_mvnorm}
+\alias{r_mvnorm_chol}
+\alias{r_mvnorm_prec}
 \alias{r_singular_mvnorm}
-\alias{dmvnorm}
-\alias{dmvnorm_prec}
+\alias{d_mvnorm}
+\alias{d_mvnorm_prec}
 \title{Multivariate Normal distribution}
 \usage{
-rmvnorm(n, mu, Sigma)
+r_mvnorm(n, mu, Sigma)
 
-rmvnorm_chol(n, mu, Sigma_chol)
+r_mvnorm_chol(n, mu, Sigma_chol)
 
-rmvnorm_prec(n, mu, Omega)
+r_mvnorm_prec(n, mu, Omega)
 
 r_singular_mvnorm(n, Sigma)
 
-dmvnorm(x, mu, Sigma, log = FALSE)
+d_mvnorm(x, mu, Sigma, log = FALSE)
 
-dmvnorm_prec(x, mu, Omega, log = FALSE)
+d_mvnorm_prec(x, mu, Omega, log = FALSE)
 }
 \arguments{
 \item{n}{Number of observations.}

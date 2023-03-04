@@ -2,18 +2,19 @@
 % Please edit documentation in R/dirichlet.R
 \name{Dirichlet}
 \alias{Dirichlet}
-\alias{ddirichlet}
-\alias{rdirichlet}
+\alias{d_dirichlet}
+\alias{r_dirichlet}
 \title{Dirichlet Distribution}
 \usage{
-ddirichlet(x, alpha, log = FALSE)
+d_dirichlet(x, alpha, log = FALSE)
 
-rdirichlet(n, alpha)
+r_dirichlet(n, alpha)
 }
 \arguments{
-\item{x}{A value in the sample space}
+\item{x}{A \eqn{k \times n} matrix where each column represents a value in
+the sample space.}
 
-\item{alpha}{Vector of eqn{k} rate parameters}
+\item{alpha}{Vector of \eqn{k} rate parameters}
 
 \item{log}{If \code{TRUE} return the log-density}
 
@@ -27,8 +28,40 @@ Functions for the Dirichlet distribution on the \eqn{k} dimensional
 probability simplex.
 }
 \details{
-We assume Dirichlet distribution with density
+We assume the Dirichlet distribution with density
 \deqn{
-f(x) = \frac{x_1^{\alpha_1-1} \cdots x_k^{\alpha_k-1}}{B(\bm{\alpha})}.
+f(x) = x_1^{\alpha_1-1} \cdots x_k^{\alpha_k-1} \Big/ B(\bm{\alpha}),
+\quad
+x_j \in [0,1], \quad
+\sum_{j=1}^k x_j = 1,
 }
+where
+\deqn{
+B(\bm{\alpha}) =
+\Gamma(\alpha_1) \cdots \Gamma(\alpha_k) \Big/ \Gamma(\sum_{j=1}^k \alpha_j).
+}
+Note that with any elements of \eqn{\bm{x}} exactly zero, the density
+\eqn{f(\bm{x})} may be \code{Inf}, \code{-Inf}, or \code{NaN}, depending on
+the value of the corresponding \eqn{\bm{\alpha}} parameter.
+}
+\examples{
+pi = 1:3 / sum(1:3)
+
+# Concentration parameters as a probability vector
+x = r_dirichlet(20, pi)
+d_dirichlet(x, pi)
+
+# Use same probability vector, but scale the total to a small number.
+# Here, x should be starting to behave like Mult(1, pi)
+x = r_dirichlet(500, 0.01 * pi)
+round(x[,1:20], 6)
+rowMeans(x)
+d_dirichlet(x, 0.01 * pi)
+
+# Use same probability vector, but scale the total to a large number.
+# Here, x should be concentrating around pi.
+x = r_dirichlet(500, 1000 * pi)
+round(x[,1:20], 6)
+rowMeans(x)
+
 }

@@ -28,7 +28,7 @@ NULL
 
 #' @name MultivariateNormal
 #' @export
-rmvnorm = function(n, mu, Sigma)
+r_mvnorm = function(n, mu, Sigma)
 {
 	k = length(mu)
 	stopifnot(k == nrow(Sigma) && k == ncol(Sigma))
@@ -39,7 +39,7 @@ rmvnorm = function(n, mu, Sigma)
 
 #' @name MultivariateNormal
 #' @export
-rmvnorm_chol = function(n, mu, Sigma_chol)
+r_mvnorm_chol = function(n, mu, Sigma_chol)
 {
 	k = length(mu)
 	stopifnot(k == nrow(Sigma_chol) && k == ncol(Sigma_chol))
@@ -49,7 +49,7 @@ rmvnorm_chol = function(n, mu, Sigma_chol)
 
 #' @name MultivariateNormal
 #' @export
-rmvnorm_prec = function(n, mu, Omega)
+r_mvnorm_prec = function(n, mu, Omega)
 {
 	k = length(mu)
 	stopifnot(k == nrow(Omega) && k == ncol(Omega))
@@ -83,7 +83,7 @@ r_singular_mvnorm = function(n, Sigma)
 
 #' @name MultivariateNormal
 #' @export
-dmvnorm = function(x, mu, Sigma, log = FALSE)
+d_mvnorm = function(x, mu, Sigma, log = FALSE)
 {
 	n = nrow(x)
 	k = length(mu)
@@ -101,7 +101,7 @@ dmvnorm = function(x, mu, Sigma, log = FALSE)
 
 #' @name MultivariateNormal
 #' @export
-dmvnorm_prec = function(x, mu, Omega, log = FALSE)
+d_mvnorm_prec = function(x, mu, Omega, log = FALSE)
 {
 	n = nrow(x)
 	k = length(mu)

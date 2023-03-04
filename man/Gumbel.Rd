@@ -2,19 +2,19 @@
 % Please edit documentation in R/gumbel.R
 \name{Gumbel}
 \alias{Gumbel}
-\alias{rgumbel}
-\alias{dgumbel}
-\alias{pgumbel}
-\alias{qgumbel}
+\alias{r_gumbel}
+\alias{d_gumbel}
+\alias{p_gumbel}
+\alias{q_gumbel}
 \title{Gumbel Distribution}
 \usage{
-rgumbel(n, mu = 0, sigma = 1)
+r_gumbel(n, mu = 0, sigma = 1)
 
-dgumbel(x, mu = 0, sigma = 1, log = FALSE)
+d_gumbel(x, mu = 0, sigma = 1, log = FALSE)
 
-pgumbel(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+p_gumbel(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 
-qgumbel(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+q_gumbel(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 }
 \arguments{
 \item{n}{Number of desired draws}

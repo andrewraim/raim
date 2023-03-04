@@ -20,15 +20,15 @@ NULL
 
 #' @name Gumbel
 #' @export
-rgumbel = function(n, mu = 0, sigma = 1)
+r_gumbel = function(n, mu = 0, sigma = 1)
 {
 	u = runif(n)
-	qgumbel(u, mu, sigma) 
+	q_gumbel(u, mu, sigma)
 }
 
 #' @name Gumbel
 #' @export
-dgumbel = function(x, mu = 0, sigma = 1, log = FALSE)
+d_gumbel = function(x, mu = 0, sigma = 1, log = FALSE)
 {
 	z = (x - mu) / sigma
 	out = -log(sigma) - (z + exp(-z))
@@ -37,7 +37,7 @@ dgumbel = function(x, mu = 0, sigma = 1, log = FALSE)
 
 #' @name Gumbel
 #' @export
-pgumbel = function(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE) 
+p_gumbel = function(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE) 
 {
 	z = (q - mu) / sigma
 	out0 = -exp(-z)
@@ -47,7 +47,7 @@ pgumbel = function(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 
 #' @name Gumbel
 #' @export
-qgumbel = function(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE) 
+q_gumbel = function(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE) 
 {
 	lp0 = ifelse(log.p, p, log(p))
 	lp = ifelse(lower.tail, lp0, log1p(-exp(lp0)))

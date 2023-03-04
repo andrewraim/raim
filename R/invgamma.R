@@ -14,15 +14,16 @@ NULL
 
 #' @name InverseGamma
 #' @export
-rinvgamma = function(n, a, b)
+r_invgamma = function(n, a, b)
 {
 	1 / rgamma(n, a, b)
 }
 
 #' @name InverseGamma
 #' @export
-dinvgamma = function(x, a, b, log = FALSE)
+d_invgamma = function(x, a, b, log = FALSE)
 {
 	logf = dgamma(1/x, a, b, log = TRUE) - 2 * log(x)
 	if (log) { return(logf) } else { return(exp(logf))}
 }
+

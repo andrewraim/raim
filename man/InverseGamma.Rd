@@ -2,13 +2,13 @@
 % Please edit documentation in R/invgamma.R
 \name{InverseGamma}
 \alias{InverseGamma}
-\alias{rinvgamma}
-\alias{dinvgamma}
+\alias{r_invgamma}
+\alias{d_invgamma}
 \title{Inverse Gamma distribution}
 \usage{
-rinvgamma(n, a, b)
+r_invgamma(n, a, b)
 
-dinvgamma(x, a, b, log = FALSE)
+d_invgamma(x, a, b, log = FALSE)
 }
 \arguments{
 \item{n}{Number of observations.}
