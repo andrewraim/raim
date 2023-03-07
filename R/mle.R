@@ -2,10 +2,15 @@
 #'
 #' @param init Initial value of \eqn{\phi} for the sampler
 #' @param loglik Log-likelihood function of \eqn{\phi}
-#' @param n Sample size. Needed for AIC, BIC and some other optional results
+#' @param n Sample size. Needed for AIC, BIC and some other optional results.
+#' Default value \code{NA} results in \code{NA} values for those optional
+#' results.
 #' @param df Degrees of freedom to use for tests. Default value \code{Inf}
 #' assumes a large sample Normal distribution.
-#' @param control Object created via \code{mle_optim_control}
+#' @param fixed a vector of integers; default is an empty vector. These are
+#' interpreted as indices into \code{init}; corresponding elements are held
+#' fixed at their \code{init} values during optimization.
+#' @param control Object created via \code{mle_optim_control} function.
 #' @param optim_method A \code{method} argument to pass to \code{optim}
 #' @param optim_control A \code{control} argument to pass to \code{optim}
 #' @param tx A transformation of the parameter \eqn{\phi}
@@ -32,7 +37,8 @@ mle_optim_control = function(optim_method = "L-BFGS-B", optim_control = list())
 
 #' @name mle_optim
 #' @export
-mle_optim = function(init, loglik, n = NA, df = Inf, control = mle_optim_control())
+mle_optim = function(init, loglik, n = NA, df = Inf, fixed = integer(0),
+	control = mle_optim_control())
 {
 	start_time = Sys.time()
 	stopifnot(class(control) == "mle_optim_control")
@@ -44,22 +50,48 @@ mle_optim = function(init, loglik, n = NA, df = Inf, control = mle_optim_control
 		par_names = names(init)
 	}
 
-	optim_res = optim(par = init, fn = loglik, method = control$optim_method,
-		control = control$optim_control, hessian = TRUE)
+	# Set up any fixed arguments
+	stopifnot(all(is.integer(fixed)))
+	stopifnot(all(fixed >= 0 & fixed <= qq))
+	unfixed = setdiff(seq_len(qq), fixed)
+	if (length(fixed) > 0) {
+		loglik_internal = function(par) {
+			par_ext = init
+			par_ext[unfixed] = par
+			loglik(par_ext)
+		}
+	} else {
+		loglik_internal = loglik
+	}
 
-	par = optim_res$par
-	vcov = -solve(optim_res$hessian)
-	loglik_hat = optim_res$value
-	gr = numDeriv::grad(loglik, x = par)
+	optim_res = optim(par = init[unfixed], fn = loglik_internal,
+		method = control$optim_method, control = control$optim_control,
+		hessian = TRUE)
 
+	par = init
+	par[unfixed] = optim_res$par
 	names(par) = par_names
+	
+	gr = numeric(qq)
+	gr[unfixed] = numDeriv::grad(loglik_internal, x = optim_res$par)
+
+	loglik_hat = optim_res$value
+
+	vcov = matrix(0, qq, qq)
+	vcov[unfixed,unfixed] = tryCatch({
+		-solve(optim_res$hessian)
+	}, error = function(e) {
+		msg = sprintf("%s\n%s", "Failure to compute inverse of hessian", e)
+		warning(msg)
+		matrix(NA, length(unfixed), length(unfixed))
+	})
 	rownames(vcov) = colnames(vcov) = par_names
 
 	elapsed_sec = as.numeric(Sys.time() - start_time, "secs")
 
 	res = list(par = par, vcov = vcov, loglik = loglik_hat, gr = gr,
 		optim_res = optim_res, df = df, n = n, qq = qq,
-		elapsed_sec = elapsed_sec)
+		elapsed_sec = elapsed_sec, fixed = fixed)
 	class(res) = "mle_result"
 	return(res)
 }
@@ -245,6 +277,11 @@ print.mle_result = function(x, ...)
 	DF[,3] = round(DF[,3], 4)
 	DF[,4] = my_numerical_format(DF[,4])
 	DF[,5] = my_numerical_format(DF[,5])
+	
+	if (length(x$fixed) > 0) {
+		DF$Fixed = "F"
+		DF$Fixed[x$fixed] = "T"
+	}
 
 	print(DF)
 

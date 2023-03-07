@@ -20,7 +20,14 @@
 \usage{
 mle_optim_control(optim_method = "L-BFGS-B", optim_control = list())
 
-mle_optim(init, loglik, n = NA, df = Inf, control = mle_optim_control())
+mle_optim(
+  init,
+  loglik,
+  n = NA,
+  df = Inf,
+  fixed = integer(0),
+  control = mle_optim_control()
+)
 
 \method{txform}{mle_result}(object, tx, jacobian = NULL, ...)
 
@@ -57,12 +64,18 @@ mle_optim(init, loglik, n = NA, df = Inf, control = mle_optim_control())
 
 \item{loglik}{Log-likelihood function of \eqn{\phi}}
 
-\item{n}{Sample size. Needed for AIC, BIC and some other optional results}
+\item{n}{Sample size. Needed for AIC, BIC and some other optional results.
+Default value \code{NA} results in \code{NA} values for those optional
+results.}
 
 \item{df}{Degrees of freedom to use for tests. Default value \code{Inf}
 assumes a large sample Normal distribution.}
 
-\item{control}{Object created via \code{mle_optim_control}}
+\item{fixed}{a vector of integers; default is an empty vector. These are
+interpreted as indices into \code{init}; corresponding elements are held
+fixed at their \code{init} values during optimization.}
+
+\item{control}{Object created via \code{mle_optim_control} function.}
 
 \item{object}{Result of \code{mle_optim} or \code{txform}}
 
