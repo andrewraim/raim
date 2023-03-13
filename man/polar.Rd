@@ -15,7 +15,8 @@ inv_polar(x)
 \item{x}{A point in Euclidean space \eqn{\mathbb{R}^{d-1}}.}
 }
 \description{
-The polar transformation and its inverse.
+The polar transformation and its inverse, as expressed in Section 2.7 of
+Anderson (2003).
 }
 \details{
 \describe{
@@ -28,4 +29,8 @@ p = 1:5 / sum(1:5)
 x = mlogit(p)
 p_new = inv_mlogit(x)
 
+}
+\references{
+T.W. Anderson (2003). An Introduction to Multivariate
+Statistical Analysis, Wiley-Interscience, 3rd Edition.
 }
