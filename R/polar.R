@@ -3,14 +3,14 @@
 #' The polar transformation and its inverse, as expressed in Section 2.7 of
 #' Anderson (2003), restricted to the unit sphere.
 #'
-#' @param x A point in Euclidean space \eqn{\mathbb{R}^{d-1}}.
+#' @param u A point in the unit cube \eqn{[0,1]^{d-1}}.
 #' @param z A point in the unit sphere
 #' \eqn{\mathbb{S}^d = \{ \bm{z} \in \mathbb{R}^d: \bm{z}^\top \bm{z} = 1 \}}.
 #'
 #' @details
-#' The \code{inv_polar} transformation, from \eqn{\mathbb{S}^d} to
-#' \eqn{\mathbb{R}^{d-1}}, can be described as a composition of three simpler
-#' transformations. The result
+#' The \code{inv_polar} transformation \code{z = inv_polar(u)}, from
+#' \eqn{[0,1]^{d-1}} to \eqn{\mathbb{S}^d}, can be described as a
+#' composition of two transformations. The result
 #' \deqn{
 #' z_j =
 #' \begin{cases}
@@ -23,14 +23,12 @@
 #' \phi_j =
 #' \begin{cases}
 #' \pi u_j - \pi / 2 , & j = 1, \ldots, d-2, \\
-#' 2 \pi u_j - \pi, & j = d-1,
+#' 2 \pi u_j - \pi, & j = d-1.
 #' \end{cases}
 #' }
-#' where \eqn{u_j = \text{plogis}(x_j)}.
 #' 
-#' The \code{polar} transformation, from \eqn{\mathbb{R}^{d-1}} to
-#' \eqn{\mathbb{S}^d}, can be obtained by inverting \code{inv_polar}
-#' It is computed as \eqn{x_j = \text{qlogis}(u_j)}, where 
+#' The \code{polar} transformation \code{u = polar(z)}, from \eqn{\mathbb{S}^d}
+#' to \eqn{[0,1]^{d-1}}, is the inverse of \code{inv_polar}:
 #' \deqn{
 #' u_j =
 #' \begin{cases}
@@ -70,31 +68,29 @@ polar = function(z)
 		phi[j] = asin( z[j] / sqrt(1 - sum(z[idx]^2)) )
 	}
 	phi[d-1] = atan2(z[d-1], z[d])
-	
+
 	# Unshift and unscale
 	idx = seq_len(d-2)
 	u = numeric(d-1)
 	u[idx] = (phi[idx] + pi/2) / pi
 	u[d-1] = (phi[d-1] + pi) / (2*pi)
-	
-	# Back to Euclidean space
-	x = qlogis(u)
 
-	return(x)
+	return(u)
 }
 
 #' @name polar
 #' @export
-inv_polar = function(x)
+inv_polar = function(u)
 {
-	d = length(x) + 1
-	u = plogis(x)
+	d = length(u) + 1
+	stopifnot(all(0 <= u & u <= 1))
 
 	# Compute angles phi from x.
 	# Shift and scale x_1, ... x_{d-2} to be between -pi/2 and pi/2.
 	# Shift and scale x_{d-1} to be between -pi and pi.
+	idx = seq_len(d-2)
 	phi = numeric(d-1)
-	phi[seq_len(d-2)] = pi * u[seq_len(d-2)] - pi/2 
+	phi[idx] = pi * u[idx] - pi/2 
 	phi[d-1] = 2*pi * u[d-1] - pi
 
 	z = numeric(d)

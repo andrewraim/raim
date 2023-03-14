@@ -7,22 +7,22 @@
 \usage{
 polar(z)
 
-inv_polar(x)
+inv_polar(u)
 }
 \arguments{
 \item{z}{A point in the unit sphere
 \eqn{\mathbb{S}^d = \{ \bm{z} \in \mathbb{R}^d: \bm{z}^\top \bm{z} = 1 \}}.}
 
-\item{x}{A point in Euclidean space \eqn{\mathbb{R}^{d-1}}.}
+\item{u}{A point in the unit cube \eqn{[0,1]^{d-1}}.}
 }
 \description{
 The polar transformation and its inverse, as expressed in Section 2.7 of
 Anderson (2003), restricted to the unit sphere.
 }
 \details{
-The \code{inv_polar} transformation, from \eqn{\mathbb{S}^d} to
-\eqn{\mathbb{R}^{d-1}}, can be described as a composition of three simpler
-transformations. The result
+The \code{inv_polar} transformation \code{z = inv_polar(u)}, from
+\eqn{[0,1]^{d-1}} to \eqn{\mathbb{S}^d}, can be described as a
+composition of two transformations. The result
 \deqn{
 z_j =
 \begin{cases}
@@ -35,14 +35,12 @@ is computed from angles
 \phi_j =
 \begin{cases}
 \pi u_j - \pi / 2 , & j = 1, \ldots, d-2, \\
-2 \pi u_j - \pi, & j = d-1,
+2 \pi u_j - \pi, & j = d-1.
 \end{cases}
 }
-where \eqn{u_j = \text{plogis}(x_j)}.
 
-The \code{polar} transformation, from \eqn{\mathbb{R}^{d-1}} to
-\eqn{\mathbb{S}^d}, can be obtained by inverting \code{inv_polar}
-It is computed as \eqn{x_j = \text{qlogis}(u_j)}, where
+The \code{polar} transformation \code{u = polar(z)}, from \eqn{\mathbb{S}^d}
+to \eqn{[0,1]^{d-1}}, is the inverse of \code{inv_polar}:
 \deqn{
 u_j =
 \begin{cases}
