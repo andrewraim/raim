@@ -3,6 +3,7 @@
 #' Compute \code{log(sum(exp(x)))} but in a more stable way.
 #'
 #' @param x A numeric vector
+#' @param y A numeric vector
 #'
 #' @details Computed using the method described by user Ben in StackExchange
 #' thread \url{https://stats.stackexchange.com/questions/381936/vectorised-computation-of-logsumexp}.
@@ -15,6 +16,10 @@
 #' log(sum(exp(x)))
 #' log_sum_exp(x)
 #'
+#' @name Log-Sum-Exp
+NULL
+
+#' @name Log-Sum-Exp
 #' @export
 log_sum_exp = function(x) {
 	k = length(x)
@@ -28,3 +33,24 @@ log_sum_exp = function(x) {
 
 	return(s[k])
 }
+
+#' @name Log-Sum-Exp
+#' @export
+log_add2_exp = function(x, y)
+{
+	stopifnot(length(x) == length(y))
+	s = min(x,y)
+	t = max(x,y)
+	t + log1p(exp(s - t))
+}
+
+#' @name Log-Sum-Exp
+#' @export
+log_sub2_exp = function(x, y)
+{
+	stopifnot(length(x) == length(y))
+	s = min(x,y)
+	t = max(x,y)
+	t + log1p(-exp(s - t))
+}
+
