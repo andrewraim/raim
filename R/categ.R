@@ -30,7 +30,7 @@ r_categ = function(n, p, log_p = FALSE)
 	out = numeric(n)
 
 	for (i in 1:n) {
-		z = rgumbel(k)
+		z = r_gumbel(k)
 		out[i] = which.max(z + lp)
 	}
 
@@ -44,7 +44,7 @@ r_categ_mat = function(P, log_p = FALSE)
 	log_P = switch(log_p, "TRUE" = P, log(P))
 	n = nrow(log_P)
 	k = ncol(log_P)
-	Z = matrix(rgumbel(n*k), n, k)
+	Z = matrix(r_gumbel(n*k), n, k)
 	max.col(Z + log_P)
 }
 

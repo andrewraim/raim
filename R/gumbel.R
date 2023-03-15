@@ -32,7 +32,7 @@ d_gumbel = function(x, mu = 0, sigma = 1, log = FALSE)
 {
 	z = (x - mu) / sigma
 	out = -log(sigma) - (z + exp(-z))
-	ifelse(log, out, exp(out))
+	if (log) { return(out) } else { return(exp(out)) }
 }
 
 #' @name Gumbel
@@ -41,16 +41,16 @@ p_gumbel = function(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 {
 	z = (q - mu) / sigma
 	out0 = -exp(-z)
-	out = ifelse(!lower.tail, log1p(-exp(out0)), out0)
-	ifelse(log.p, out, exp(out))
+	if (lower.tail) { out = out0 } else { out = log1p(-exp(out0)) }
+	if (log.p) { return(out) } else { return(exp(out)) }
 }
 
 #' @name Gumbel
 #' @export
 q_gumbel = function(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE) 
 {
-	lp0 = ifelse(log.p, p, log(p))
-	lp = ifelse(lower.tail, lp0, log1p(-exp(lp0)))
+	if (log.p) { lp0 = p } else { lp0 = log(p) }
+	if (lower.tail) { lp = lp0 } else { lp = log1p(-exp(lp0)) }
 	mu - sigma * log(-lp)
 }
 
