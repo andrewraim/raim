@@ -44,6 +44,11 @@ mle_optim = function(init, loglik, n = NA, df = Inf, fixed = integer(0),
 	stopifnot(class(control) == "mle_optim_control")
 	qq = length(init)
 
+	stopifnot(is.numeric(df))
+	if (!is.na(n)) {
+		stopifnot(is.numeric(n))
+	}
+
 	if (is.null(names(init))) {
 		par_names = sprintf("par%d", seq_len(qq))
 	} else {
@@ -72,7 +77,7 @@ mle_optim = function(init, loglik, n = NA, df = Inf, fixed = integer(0),
 	par[unfixed] = optim_res$par
 	names(par) = par_names
 	
-	gr = numeric(qq)
+	gr = rep(NA, qq)
 	gr[unfixed] = numDeriv::grad(loglik_internal, x = optim_res$par)
 
 	loglik_hat = optim_res$value
