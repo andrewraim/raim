@@ -105,7 +105,7 @@ d_mvnorm_prec = function(x, mu, Omega, log = FALSE)
 {
 	n = nrow(x)
 	k = length(mu)
-	stopifnot(k == nrow(Sigma) && k == ncol(Sigma) && k == ncol(x))
+	stopifnot(k == nrow(Omega) && k == ncol(Omega) && k == ncol(x))
 
 	xc = x - t(mu) %x% matrix(1,n,1)
 	Omega_xc = Omega %*% t(xc)
