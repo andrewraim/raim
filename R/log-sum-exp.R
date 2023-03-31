@@ -15,6 +15,14 @@
 #' x = log(2*pi)
 #' log(sum(exp(x)))
 #' log_sum_exp(x)
+#' 
+#' # Result should be 5 on the original scale
+#' out = log_add2_exp(log(3), log(2))
+#' exp(out)
+#' 
+#' # Result should be 5 on the original scale
+#' out = log_sub2_exp(log(12), log(5))
+#' exp(out)
 #'
 #' @name Log-Sum-Exp
 NULL
@@ -39,8 +47,8 @@ log_sum_exp = function(x) {
 log_add2_exp = function(x, y)
 {
 	stopifnot(length(x) == length(y))
-	s = min(x,y)
-	t = max(x,y)
+	s = pmin(x,y)
+	t = pmax(x,y)
 	t + log1p(exp(s - t))
 }
 
@@ -49,8 +57,6 @@ log_add2_exp = function(x, y)
 log_sub2_exp = function(x, y)
 {
 	stopifnot(length(x) == length(y))
-	s = min(x,y)
-	t = max(x,y)
-	t + log1p(-exp(s - t))
+	x + log1p(-exp(y - x))
 }
 
