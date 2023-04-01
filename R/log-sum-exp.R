@@ -15,6 +15,14 @@
 #' x = log(2*pi)
 #' log(sum(exp(x)))
 #' log_sum_exp(x)
+#' 
+#' # Result should be 5 on the original scale
+#' out = log_add2_exp(log(3), log(2))
+#' exp(out)
+#' 
+#' # Result should be 5 on the original scale
+#' out = log_sub2_exp(log(12), log(5))
+#' exp(out)
 #'
 #' @name Log-Sum-Exp
 NULL
