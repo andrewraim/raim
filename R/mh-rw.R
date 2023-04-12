@@ -40,9 +40,7 @@ NULL
 mh_rw_control = function(proposal_scale = 1, R = 1000,
 	grp = NULL, burn = 0, thin = 1, report_period = R + 1)
 {
-	q = nrow(proposal_var)
 	stopifnot(R > burn)
-
 	out = list(proposal_scale = proposal_scale, R = R, grp = grp, burn = burn,
 		thin = thin, report_period = report_period)
 	class(out) = "mh_rw_control"
@@ -99,7 +97,7 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 
 	for (r in 1:R) {
 		# Draw the jump sizes and uniforms for all groups
-		bc = rmvnorm_chol(1, numeric(q), V_chol)
+		bc = r_mvnorm_chol(1, numeric(q), V_chol)
 		u = runif(G)
 
 		for (g in 1:G) {
