@@ -5,37 +5,36 @@
 \alias{printf}
 \alias{logger}
 \alias{fprintf}
-\alias{my_numerical_format}
 \title{Printing}
 \usage{
 printf(fmt, ...)
 
-logger(fmt, ...)
+logger(fmt, ..., dt_fmt = "\%Y-\%m-\%d \%H:\%M:\%S", join = " - ")
 
 fprintf(file, fmt, ...)
-
-my_numerical_format(x, tol = 1e-04, fmt_small = "\%0.3E", fmt_large = "\%0.4f")
 }
 \arguments{
-\item{fmt}{Formatted string which can be processed by \code{sprintf}}
+\item{fmt}{Format string which can be processed by \code{sprintf}}
 
 \item{...}{Additional arguments}
+
+\item{dt_fmt}{Format string which can be processed by \code{format.POSIXct}}
+
+\item{join}{A string to place between the timestamp and the message.}
 
 \item{file}{A connection, or a character string naming the file to print to}
 
 \item{x}{A numeric vector}
-
-\item{tol}{A positive tolerance}
-
-\item{fmt_small}{An \code{sprintf} format to display small-magnitude numbers}
-
-\item{fmt_large}{An \code{sprintf} format to display large-magnitude numbers}
 }
 \description{
-Printing
+Functions to print messages using an \code{sprintf} syntax.
 }
-\details{
-For \code{my_numerical_format}n numbers in \code{x} with smaller magnitude
-than \code{tol} are formatted using \code{fmt_small}; others are formatted
-using \code{fmt_large}.
+\examples{
+printf("Hello world \%f \%d\n", 0.1, 5)
+logger("Hello world\n")
+logger("Hello world \%f \%d\n", 0.1, 5)
+logger("Hello world \%f \%d\n", 0.1, 5, dt_fmt = "\%H:\%M:\%S")
+logger("Hello world \%f \%d\n", 0.1, 5, join = " >> ")
+logger("Hello world \%f \%d\n", 0.1, 5, join = " ")
+
 }
