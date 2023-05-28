@@ -280,8 +280,8 @@ print.mle_result = function(x, ...)
 	DF[,1] = round(DF[,1], 4)
 	DF[,2] = round(DF[,2], 4)
 	DF[,3] = round(DF[,3], 4)
-	DF[,4] = my_numerical_format(DF[,4])
-	DF[,5] = my_numerical_format(DF[,5])
+	DF[,4] = format_numeric(DF[,4])
+	DF[,5] = format_numeric(DF[,5])
 	
 	if (length(x$fixed) > 0) {
 		DF$Fixed = "F"
