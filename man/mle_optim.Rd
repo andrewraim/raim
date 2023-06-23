@@ -3,19 +3,16 @@
 \name{mle_optim}
 \alias{mle_optim}
 \alias{mle_optim_control}
-\alias{txform.mle_result}
-\alias{print.txform_mle_result}
-\alias{coef.mle_transform_result}
-\alias{vcov.mle_transform_result}
-\alias{confint.mle_result}
-\alias{print.mle_result_ci}
-\alias{print.mle_result}
-\alias{summary.mle_result}
-\alias{coef.mle_result}
-\alias{logLik.mle_result}
-\alias{AIC.mle_result}
-\alias{BIC.mle_result}
-\alias{vcov.mle_result}
+\alias{txform.mle_optim}
+\alias{print.mle_optim}
+\alias{summary.mle_optim}
+\alias{coef.mle_optim}
+\alias{logLik.mle_optim}
+\alias{AIC.mle_optim}
+\alias{BIC.mle_optim}
+\alias{vcov.mle_optim}
+\alias{parnames.mle_optim}
+\alias{parnames<-.mle_optim}
 \title{MLE Optimization}
 \usage{
 mle_optim_control(optim_method = "L-BFGS-B", optim_control = list())
@@ -29,31 +26,25 @@ mle_optim(
   control = mle_optim_control()
 )
 
-\method{txform}{mle_result}(object, tx, jacobian = NULL, ...)
+\method{txform}{mle_optim}(object, tx, jacobian = NULL, ...)
 
-\method{print}{txform_mle_result}(x, ...)
+\method{print}{mle_optim}(x, ...)
 
-\method{coef}{mle_transform_result}(object, ...)
+\method{summary}{mle_optim}(object, ...)
 
-\method{vcov}{mle_transform_result}(object, ...)
+\method{coef}{mle_optim}(object, ...)
 
-\method{confint}{mle_result}(object, parm, level = 0.95, ...)
+\method{logLik}{mle_optim}(object, ...)
 
-\method{print}{mle_result_ci}(x, ...)
+\method{AIC}{mle_optim}(object, ..., k = 2)
 
-\method{print}{mle_result}(x, ...)
+\method{BIC}{mle_optim}(object, ...)
 
-\method{summary}{mle_result}(object, ...)
+\method{vcov}{mle_optim}(object, ...)
 
-\method{coef}{mle_result}(object, ...)
+\method{parnames}{mle_optim}(object, ...)
 
-\method{logLik}{mle_result}(object, ...)
-
-\method{AIC}{mle_result}(object, ..., k = 2)
-
-\method{BIC}{mle_result}(object, ...)
-
-\method{vcov}{mle_result}(object, ...)
+\method{parnames}{mle_optim}(object) <- value
 }
 \arguments{
 \item{optim_method}{A \code{method} argument to pass to \code{optim}}
@@ -87,11 +78,11 @@ fixed at their \code{init} values during optimization.}
 
 \item{x}{}
 
+\item{k}{}
+
 \item{parm}{}
 
 \item{level}{}
-
-\item{k}{}
 }
 \description{
 MLE Optimization

@@ -3,9 +3,10 @@
 \name{mh_rw}
 \alias{mh_rw}
 \alias{mh_rw_control}
-\alias{print.mh_rw_result}
-\alias{txform.mh_rw_result}
-\alias{print.txform_mh_rw_result}
+\alias{print.mh_rw}
+\alias{parnames.mh_rw}
+\alias{parnames<-.mh_rw}
+\alias{txform.mh_rw}
 \title{Random Walk Metropolis-Hastings with Gaussian Proposal}
 \usage{
 mh_rw_control(
@@ -19,11 +20,13 @@ mh_rw_control(
 
 mh_rw(init, log_post, proposal_var, control = mh_rw_control())
 
-\method{print}{mh_rw_result}(x, ...)
+\method{print}{mh_rw}(x, ...)
 
-\method{txform}{mh_rw_result}(object, tx, ...)
+\method{parnames}{mh_rw}(object, ...)
 
-\method{print}{txform_mh_rw_result}(x, ...)
+\method{parnames}{mh_rw}(object) <- value
+
+\method{txform}{mh_rw}(object, tx, ...)
 }
 \arguments{
 \item{proposal_scale}{A scalar multiple applied to \code{proposal_var}}

@@ -20,3 +20,25 @@ txform = function(object, tx, ...)
 {
 	UseMethod("txform")
 }
+
+#' Parameter names
+#' 
+#' Get or set parameter names.
+#' 
+#' @param object An object.
+#' @param value a character vector.
+#' @param ... Additional parameters.
+#'
+#' @name parnames
+#' @export
+parnames = function(object, ...)
+{
+	UseMethod("parnames")
+}
+
+#' @name parnames
+#' @export
+`parnames<-` = function(object, value)
+{
+	UseMethod("parnames<-")
+}

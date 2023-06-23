@@ -134,13 +134,13 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 
 	out = list(par_hist = par_hist, lp_hist = lp_hist, accept = accept_grp / R,
 		grp = grp, elapsed_sec = elapsed_sec, R = R, burn = burn, thin = thin)
-	class(out) = "mh_rw_result"
+	class(out) = "mh_rw"
 	return(out)
 }
 
 #' @name mh_rw
 #' @export
-print.mh_rw_result = function(x, ...)
+print.mh_rw = function(x, ...)
 {
 	printf("Metropolis-Hastings Random Walk\n")
 
@@ -198,32 +198,33 @@ print.mh_rw_result = function(x, ...)
 
 #' @name mh_rw
 #' @export
-txform.mh_rw_result = function(object, tx, ...)
+parnames.mh_rw = function(object, ...)
 {
-	par_mcmc = object$par_hist
-	out = t(apply(par_mcmc, 1, tx))
-	class(out) = "txform_mh_rw_result"
-	return(out)
+	colnames(object$par_hist)
 }
 
 #' @name mh_rw
 #' @export
-print.txform_mh_rw_result = function(x, ...)
+`parnames<-.mh_rw` = function(object, value)
 {
-	printf("Metropolis-Hastings Random Walk: Transformed Parameters\n")
+	object_name = deparse(substitute(object))
+	d = ncol(object$par_hist)
+	stopifnot(d == length(value))
+	colnames(object$par_hist) = value
+	assign(object_name, object, envir = parent.frame())
+}
 
-	DF = data.frame(
-		mean = colMeans(x),
-		sd = apply(x, 2, sd),
-		lo = apply(x, 2, quantile, prob = 0.025),
-		mid = apply(x, 2, quantile, prob = 0.5),
-		hi = apply(x, 2, quantile, prob = 0.975)
-	)
-	rownames(DF) = colnames(x)
-	colnames(DF) = c("Mean", "SD", "2.5%", "50%", "97.5%")
-	DF = round(DF, 4)
-	print(DF)
-
-	printf("---\n")
-	printf("Saved Draws: %d\n", nrow(x))
+#' @name mh_rw
+#' @export
+txform.mh_rw = function(object, tx, ...)
+{
+	par_mcmc = object$par_hist
+	R = nrow(par_mcmc)
+	q = ncol(par_mcmc)
+	tx_mcmc_list = apply(par_mcmc, 1, tx, simplify = FALSE)
+	tx_mcmc = matrix(unlist(tx_mcmc_list), nrow = R, byrow = TRUE)
+	colnames(tx_mcmc) = sprintf("txpar%d", seq_along_dim(tx_mcmc, 2))
+	out = list(par_hist = tx_mcmc)
+	class(out) = "mh_rw_txform"
+	return(out)
 }
