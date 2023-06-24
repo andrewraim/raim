@@ -23,7 +23,9 @@ shift_scale = function(x, a, b)
 	stopifnot(all(a <= b))
 	stopifnot(all(is.finite(a)))
 	stopifnot(all(is.finite(b)))
-	(x - a) / (b - a)
+	out = (x - a) / (b - a)
+	out[is.nan(out)] = 0.5
+	return(out)
 }
 
 #' @name shift_scale
