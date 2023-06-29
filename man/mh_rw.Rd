@@ -3,6 +3,7 @@
 \name{mh_rw}
 \alias{mh_rw}
 \alias{mh_rw_control}
+\alias{summary.mh_rw}
 \alias{print.mh_rw}
 \alias{parnames.mh_rw}
 \alias{parnames<-.mh_rw}
@@ -19,6 +20,8 @@ mh_rw_control(
 )
 
 mh_rw(init, log_post, proposal_var, control = mh_rw_control())
+
+\method{summary}{mh_rw}(object, level = 0.05, ...)
 
 \method{print}{mh_rw}(x, ...)
 
@@ -50,11 +53,11 @@ See details.}
 
 \item{control}{An object created via \code{mh_rw_control}}
 
-\item{x}{Object to print}
+\item{object}{Result of \code{mh_rw} or \code{txform}}
 
 \item{...}{Additional arguments}
 
-\item{object}{Result of \code{mh_rw} or \code{txform}}
+\item{x}{Object to print}
 
 \item{tx}{A transformation of the parameter \eqn{\phi}}
 }

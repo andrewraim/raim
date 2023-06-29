@@ -140,49 +140,61 @@ mh_rw = function(init, log_post, proposal_var, control = mh_rw_control())
 
 #' @name mh_rw
 #' @export
+summary.mh_rw = function(object, level = 0.05, ...)
+{
+	par_mcmc = object$par_hist
+	lp_mcmc = object$lp_hist
+	probs = c(level / 2, 0.5, 1 - level / 2)
+
+	par_df = data.frame(
+		mean = colMeans(par_mcmc),
+		sd = apply(par_mcmc, 2, sd),
+		lo = apply(par_mcmc, 2, quantile, prob = probs[1]),
+		mid = apply(par_mcmc, 2, quantile, prob = probs[2]),
+		hi = apply(par_mcmc, 2, quantile, prob = probs[3])
+	)
+	rownames(par_df) = colnames(par_mcmc)
+	colnames(par_df) = c("Mean", "SD", sprintf("%g%%", probs * 100))
+
+	lp_df = data.frame(
+		mean = mean(lp_mcmc),
+		sd = sd(lp_mcmc),
+		lo = quantile(lp_mcmc, prob = probs[1]),
+		mid = quantile(lp_mcmc, prob = probs[2]),
+		hi = quantile(lp_mcmc, prob = probs[3])
+	)
+	rownames(lp_df) = "lp"
+	colnames(lp_df) = c("Mean", "SD", sprintf("%g%%", probs * 100))
+
+	list(par_df = par_df, lp_df = lp_df)
+}
+
+
+#' @name mh_rw
+#' @export
 print.mh_rw = function(x, ...)
 {
+	ss = summary(x)
+	par_mcmc = x$par_hist
+	lp_mcmc = x$lp_hist
+
 	printf("Metropolis-Hastings Random Walk\n")
 
 	printf("--- Parameters ---\n")
-	par_mcmc = x$par_hist
+
+	DF = round(ss$par_df, 4)
 	G = length(table(x$grp))
-
-	DF = data.frame(
-		mean = colMeans(par_mcmc),
-		sd = apply(par_mcmc, 2, sd),
-		lo = apply(par_mcmc, 2, quantile, prob = 0.025),
-		mid = apply(par_mcmc, 2, quantile, prob = 0.5),
-		hi = apply(par_mcmc, 2, quantile, prob = 0.975)
-	)
-	rownames(DF) = colnames(par_mcmc)
-	colnames(DF) = c("Mean", "SD", "2.5%", "50%", "97.5%")
-	DF = round(DF, 4)
-
 	if (G > 1) {
 		# If more than one group was defined, report group memberships and
 		# acceptance rates as columns in the table.
 		DF$`Group` = x$grp
 		DF$`Accept%` = x$accept[x$grp] * 100
 	}
-
 	print(DF)
 	
 	printf("--- Log-Posterior ---\n")
-	lp_mcmc = x$lp_hist
-
-	DF = data.frame(
-		mean = mean(lp_mcmc),
-		sd = sd(lp_mcmc),
-		lo = quantile(lp_mcmc, prob = 0.025),
-		mid = quantile(lp_mcmc, prob = 0.5),
-		hi = quantile(lp_mcmc, prob = 0.975)
-	)
-	rownames(DF) = "lp"
-	colnames(DF) = c("Mean", "SD", "2.5%", "50%", "97.5%")
-	DF = round(DF, 4)
+	DF = round(ss$lp_df, 4)
 	print(DF)
-
 	printf("---\n")
 
 	printf("Chain Length: %d  Burn: %d  Thin: %d  Saved Draws: %d\n", x$R,
