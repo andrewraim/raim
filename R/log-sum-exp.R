@@ -63,7 +63,6 @@ log_sum_exp = function(x) {
 #' @export
 log_add2_exp = function(x, y)
 {
-	stopifnot(length(x) == length(y))
 	s = pmin(x,y)
 	t = pmax(x,y)
 	t + log1p(exp(s - t))
@@ -73,7 +72,6 @@ log_add2_exp = function(x, y)
 #' @export
 log_sub2_exp = function(x, y)
 {
-	stopifnot(length(x) == length(y))
 	x + log1p(-exp(y - x))
 }
 
@@ -81,7 +79,6 @@ log_sub2_exp = function(x, y)
 #' @export
 log_sub2_exp_signed = function(x, y)
 {
-	stopifnot(length(x) == length(y))
 	s = sign(x - y)
 	m = log_sub2_exp(ifelse(s >= 0, x, y), ifelse(s >= 0, y, x))
 	list(modulus = m, sign = s)
