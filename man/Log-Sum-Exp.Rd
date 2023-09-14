@@ -47,6 +47,18 @@ x = log(2*pi)
 log(sum(exp(x)))
 log_sum_exp(x)
 
+#' # Result should be 0
+x = c(-Inf -Inf, 0)
+log_sum_exp(x)
+
+# Result should be -Inf
+x = c(-Inf -Inf, -Inf)
+log_sum_exp(x)
+
+# Result should be -Inf
+x = c(-Inf -Inf, Inf)
+log_sum_exp(x)
+
 # Result should be 5 on the original scale
 out = log_add2_exp(log(3), log(2))
 exp(out)
