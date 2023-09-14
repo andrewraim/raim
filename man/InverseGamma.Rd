@@ -4,11 +4,17 @@
 \alias{InverseGamma}
 \alias{r_invgamma}
 \alias{d_invgamma}
+\alias{p_invgamma}
+\alias{q_invgamma}
 \title{Inverse Gamma distribution}
 \usage{
 r_invgamma(n, a, b)
 
 d_invgamma(x, a, b, log = FALSE)
+
+p_invgamma(q, a, b, lower.tail = TRUE, log.p = FALSE)
+
+q_invgamma(p, a, b, lower.tail = TRUE, log.p = FALSE)
 }
 \arguments{
 \item{n}{Number of observations.}
@@ -20,6 +26,12 @@ d_invgamma(x, a, b, log = FALSE)
 \item{x}{Vector of quantiles.}
 
 \item{log}{If \code{TRUE}, return densities and probabilities on the log-scale.}
+
+\item{q}{Vector of quantiles.}
+
+\item{log.p}{If \code{TRUE}, input and output probabilities on the log-scale.}
+
+\item{p}{Vector of probabilities.}
 }
 \value{
 \code{dinvgamma} gives the density, \code{rinvgamma} generates random

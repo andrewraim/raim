@@ -92,7 +92,9 @@ d_mvnorm = function(x, mu, Sigma, log = FALSE)
 	# Use QR decomposition to efficiently compute determinant and inverse
 	xc = x - t(mu) %x% matrix(1,n,1)
 	qr_out = qr(Sigma)
-	Omega_xc = qr.solve(qr_out, t(xc))
+	# Omega_xc = qr.solve(qr_out, t(xc))
+	# logdetA = sum(log(abs(diag(qr.R(qr_out)))))
+	Omega_xc = solve(Sigma, t(xc))
 	logdetA = sum(log(abs(diag(qr.R(qr_out)))))
 	logf = -k/2*log(2*pi) - logdetA / 2 - rowSums(xc * t(Omega_xc)) / 2
 
