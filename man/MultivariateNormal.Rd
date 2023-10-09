@@ -6,6 +6,7 @@
 \alias{r_mvnorm_chol}
 \alias{r_mvnorm_prec}
 \alias{r_singular_mvnorm}
+\alias{r_singular_mvnorm_prec}
 \alias{d_mvnorm}
 \alias{d_mvnorm_prec}
 \title{Multivariate Normal distribution}
@@ -16,7 +17,9 @@ r_mvnorm_chol(n, mu, Sigma_chol)
 
 r_mvnorm_prec(n, mu, Omega)
 
-r_singular_mvnorm(n, Sigma)
+r_singular_mvnorm(n, mu, Sigma, tol = 1e-06)
+
+r_singular_mvnorm_prec(n, mu, Omega, tol = 1e-06)
 
 d_mvnorm(x, mu, Sigma, log = FALSE)
 

@@ -70,15 +70,33 @@ r_mvnorm_prec = function(n, mu, Omega)
 
 #' @name MultivariateNormal
 #' @export
-r_singular_mvnorm = function(n, Sigma)
+r_singular_mvnorm = function(n, mu, Sigma, tol = 1e-6)
 {
 	eig = eigen(Sigma)
 	eigvals = eig$values
 	eigvecs = eig$vectors
-	k = nrow(eigvecs)
+	stopifnot(all(eigvals > -tol))
+	idx = which(eigvals > tol)
+	k = length(idx)
 	r = ncol(eigvecs)
 	Z = matrix(rnorm(n*k), k, n)
-	eigvecs %*% (sqrt(eigvals) * Z)
+	eigvecs[,idx] %*% (sqrt(eigvals[idx]) * Z) + mu
+}
+
+#' @name MultivariateNormal
+#' @export
+r_singular_mvnorm_prec = function(n, mu, Omega, tol = 1e-6)
+{
+	eig = eigen(Omega)
+	eigvals = eig$values
+	eigvecs = eig$vectors
+	stopifnot(all(eigvals > -tol))
+	idx = which(eigvals > tol)
+	k = length(idx)
+	r = ncol(eigvecs)
+	Z = matrix(rnorm(n*k), k, n)
+	eigvecs[,idx] %*% (1 / sqrt(eigvals[idx]) * Z) + mu
+
 }
 
 #' @name MultivariateNormal
