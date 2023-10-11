@@ -15,7 +15,14 @@
 \alias{parnames<-.mle_optim}
 \title{MLE Optimization}
 \usage{
-mle_optim_control(optim_method = "L-BFGS-B", optim_control = list())
+mle_optim_control(
+  method = "L-BFGS-B",
+  gr = NULL,
+  lower = -Inf,
+  upper = Inf,
+  control = list(),
+  hessian = TRUE
+)
 
 mle_optim(
   init,
@@ -47,9 +54,7 @@ mle_optim(
 \method{parnames}{mle_optim}(object) <- value
 }
 \arguments{
-\item{optim_method}{A \code{method} argument to pass to \code{optim}}
-
-\item{optim_control}{A \code{control} argument to pass to \code{optim}}
+\item{control}{Object created via \code{mle_optim_control} function.}
 
 \item{init}{Initial value of \eqn{\phi} for the sampler}
 
@@ -66,8 +71,6 @@ assumes a large sample Normal distribution.}
 interpreted as indices into \code{init}; corresponding elements are held
 fixed at their \code{init} values during optimization.}
 
-\item{control}{Object created via \code{mle_optim_control} function.}
-
 \item{object}{Result of \code{mle_optim} or \code{txform}}
 
 \item{tx}{A transformation of the parameter \eqn{\phi}}
@@ -80,10 +83,64 @@ fixed at their \code{init} values during optimization.}
 
 \item{k}{}
 
+\item{optim_method}{A \code{method} argument to pass to \code{optim}}
+
+\item{optim_control}{A \code{control} argument to pass to \code{optim}}
+
 \item{parm}{}
 
 \item{level}{}
 }
 \description{
 MLE Optimization
+}
+\examples{
+n = 200
+x = runif(n, 0, 2)
+X = model.matrix(~ x + I(x^2))
+
+beta_true = c(0.5, 2, -0.25)
+lambda_true = exp(X \%*\% beta_true)
+y = rpois(n, lambda_true)
+
+loglik = function(par) {
+	lambda = exp(X \%*\% par)
+	sum(dpois(y, lambda, log = TRUE))
+}
+
+# Fit Poisson model
+init = c(0,0,0)
+control = mle_optim_control()
+mle_out = mle_optim(init, loglik, control = control)
+
+parnames(mle_out)
+parnames(mle_out) = c("beta0", "beta1","beta2")
+print(mle_out)
+
+txform(mle_out, tx = function(par) { lambda = exp(X[1:5,] \%*\% par) })
+confint(mle_out)
+coef(mle_out)
+vcov(mle_out)
+logLik(mle_out)
+AIC(mle_out)
+BIC(mle_out)
+parnames(mle_out)
+
+# Same as above, but computing Hessian
+init = c(0,0,0)
+control = mle_optim_control(hessian = FALSE)
+mle_out = mle_optim(init, loglik, control = control)
+print(mle_out)
+
+parnames(mle_out)
+parnames(mle_out) = c("beta0", "beta1","beta2")
+
+txform(mle_out, tx = function(par) { lambda = exp(X[1:5,] \%*\% par) })
+confint(mle_out)
+coef(mle_out)
+vcov(mle_out)
+logLik(mle_out)
+AIC(mle_out)
+BIC(mle_out)
+
 }

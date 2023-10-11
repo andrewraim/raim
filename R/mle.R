@@ -22,15 +22,67 @@
 #' @param k 
 #' @param ... Additional arguments
 #' 
+#' @examples
+# Generate data
+#' n = 200
+#' x = runif(n, 0, 2)
+#' X = model.matrix(~ x + I(x^2))
+#' 
+#' beta_true = c(0.5, 2, -0.25)
+#' lambda_true = exp(X %*% beta_true)
+#' y = rpois(n, lambda_true)
+#' 
+#' loglik = function(par) {
+#' 	lambda = exp(X %*% par)
+#' 	sum(dpois(y, lambda, log = TRUE))
+#' }
+#' 
+#' # Fit Poisson model
+#' init = c(0,0,0)
+#' control = mle_optim_control()
+#' mle_out = mle_optim(init, loglik, control = control)
+#' 
+#' parnames(mle_out)
+#' parnames(mle_out) = c("beta0", "beta1","beta2")
+#' print(mle_out)
+#' 
+#' txform(mle_out, tx = function(par) { lambda = exp(X[1:5,] %*% par) })
+#' confint(mle_out)
+#' coef(mle_out)
+#' vcov(mle_out)
+#' logLik(mle_out)
+#' AIC(mle_out)
+#' BIC(mle_out)
+#' parnames(mle_out)
+#' 
+#' # Same as above, but computing Hessian
+#' init = c(0,0,0)
+#' control = mle_optim_control(hessian = FALSE)
+#' mle_out = mle_optim(init, loglik, control = control)
+#' print(mle_out)
+#' 
+#' parnames(mle_out)
+#' parnames(mle_out) = c("beta0", "beta1","beta2")
+#' 
+#' txform(mle_out, tx = function(par) { lambda = exp(X[1:5,] %*% par) })
+#' confint(mle_out)
+#' coef(mle_out)
+#' vcov(mle_out)
+#' logLik(mle_out)
+#' AIC(mle_out)
+#' BIC(mle_out)
+#' 
 #' @name mle_optim
 NULL
 
 #' @name mle_optim
 #' @export
-mle_optim_control = function(optim_method = "L-BFGS-B", optim_control = list())
+mle_optim_control = function(method = "L-BFGS-B", gr = NULL, lower = -Inf,
+	upper = Inf, control = list(), hessian = TRUE)
 {
-	optim_control$fnscale = -1
-	out = list(optim_method = optim_method, optim_control = optim_control)
+	control$fnscale = -1
+	out = list(method = method, gr = gr, lower = lower, upper = upper,
+		control = control, hessian = hessian)
 	class(out) = "mle_optim_control"
 	return(out)
 }
@@ -69,27 +121,41 @@ mle_optim = function(init, loglik, n = NA, df = Inf, fixed = integer(0),
 		loglik_internal = loglik
 	}
 
-	optim_res = optim(par = init[unfixed], fn = loglik_internal,
-		method = control$optim_method, control = control$optim_control,
-		hessian = TRUE)
+	optim_res = optim(
+		par = init[unfixed],
+		fn = loglik_internal,
+		gr = control$gr,
+		method = control$method,
+		lower = control$lower,
+		upper = control$upper,
+		control = control$control,
+		hessian = control$hessian)
 
 	par = init
 	par[unfixed] = optim_res$par
 	names(par) = par_names
-	
+
 	gr = rep(NA, qq)
-	gr[unfixed] = numDeriv::grad(loglik_internal, x = optim_res$par)
+	if (is.null(control$gr)) {
+		gr[unfixed] = numDeriv::grad(loglik_internal, x = optim_res$par)
+	} else {
+		gr[unfixed] = control$gr(optim_res$par)
+	}
 
 	loglik_hat = optim_res$value
 
 	vcov = matrix(0, qq, qq)
-	vcov[unfixed,unfixed] = tryCatch({
-		-solve(optim_res$hessian)
-	}, error = function(e) {
-		msg = sprintf("%s\n%s", "Failure to compute inverse of hessian", e)
-		warning(msg)
-		matrix(NA, length(unfixed), length(unfixed))
-	})
+	if (!control$hessian) {
+		vcov[unfixed,unfixed] = NA
+	} else {
+		vcov[unfixed,unfixed] = tryCatch({
+			-solve(optim_res$hessian)
+		}, error = function(e) {
+			msg = sprintf("%s\n%s", "Failure to compute inverse of hessian", e)
+			warning(msg)
+			matrix(NA, length(unfixed), length(unfixed))
+		})
+	}
 	rownames(vcov) = colnames(vcov) = par_names
 
 	elapsed_sec = as.numeric(Sys.time() - start_time, "secs")
@@ -130,6 +196,7 @@ txform.mle_optim = function(object, tx, jacobian = NULL, ...)
 	return(res)
 }
 
+# TBD: this needs to be updated or removed
 confint.mle_optim = function(object, parm, level = 0.95, ...)
 {
 	dim_theta = length(unlist(object$theta_hat))
