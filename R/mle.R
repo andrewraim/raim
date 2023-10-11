@@ -145,7 +145,7 @@ mle_optim = function(init, loglik, n = NA, df = Inf, fixed = integer(0),
 	loglik_hat = optim_res$value
 
 	vcov = matrix(0, qq, qq)
-	if (!control$hessian) {
+	if (is.null(control$hessian)) {
 		vcov[unfixed,unfixed] = NA
 	} else {
 		vcov[unfixed,unfixed] = tryCatch({
