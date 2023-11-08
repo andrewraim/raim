@@ -58,7 +58,7 @@ and
 }
 }
 \examples{
-x = 1:5
+x = 1:5 / sum(1:5)
 z = inv_polar(x)
 polar(z)
 

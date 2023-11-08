@@ -24,7 +24,7 @@
 
 \item{...}{Additional arguments}
 
-\item{object}{Object to pprint}
+\item{object}{Object to print}
 
 \item{value}{Vector of new parameter names}
 }

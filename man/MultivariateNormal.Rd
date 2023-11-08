@@ -36,6 +36,8 @@ d_mvnorm_prec(x, mu, Omega, log = FALSE)
 
 \item{Omega}{Precision matrix parameter.}
 
+\item{tol}{Cutoff for eigenvalues. See details.}
+
 \item{x}{An \eqn{n \times k} matrix with n arguments.}
 
 \item{log}{If \code{TRUE}, return densities and probabilities on the log-scale.}
@@ -55,4 +57,10 @@ A k-dimensional Multivariate Normal distribution.
 A use case for the function \code{r_singular_mvnorm} would be to start with
 a singular precision matrix \code{Q}, and use something like
 \code{Sigma = ginverse(Q)} as the covariance matrix.
+
+The argument \code{tol} is used with singular normal; only eigenvalues
+greater than \code{tol} are used in the pseudo-inverse. Furthermore, if
+eigenvalues smaller than \code{-tol} are present, an error is thrown.
+Negative eigevalues should only be present due to numerical error, as the
+precision matrix should be positive semidefinite.
 }

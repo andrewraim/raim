@@ -25,14 +25,14 @@ q_gumbel(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 
 \item{x}{Vector of quantiles}
 
-\item{log}{Logical; if TRUE, probabilities p are given as log(p)}
+\item{log}{Logical; if \code{TRUE}, probabilities p are given as \eqn{log(p)}}
 
 \item{q}{Vector of quantiles}
 
 \item{lower.tail}{Logical; if \code{TRUE} (default), probabilities are
 \eqn{P[X \leq x]} otherwise, \eqn{P[X > x]}.}
 
-\item{log.p}{Logical; if TRUE, probabilities p are given as log(p)}
+\item{log.p}{Logical; if \code{TRUE}, probabilities p are given as \eqn{log(p)}}
 
 \item{p}{Vector of probabilities}
 }

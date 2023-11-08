@@ -11,15 +11,18 @@
 #' interpreted as indices into \code{init}; corresponding elements are held
 #' fixed at their \code{init} values during optimization.
 #' @param control Object created via \code{mle_optim_control} function.
-#' @param optim_method A \code{method} argument to pass to \code{optim}
-#' @param optim_control A \code{control} argument to pass to \code{optim}
-#' @param tx A transformation of the parameter \eqn{\phi}
-#' @param jacobian  
+#' @param tx A transformation of the parameter \eqn{\phi}.
+#' @param method Passed to \code{method} argument of \code{optim}.
+#' @param gr Passed to \code{gr} argument of \code{optim}.
+#' @param lower Passed to \code{lower} argument of \code{optim}.
+#' @param upper Passed to \code{upper} argument of \code{optim}.
+#' @param hessian Passed to \code{hessian} argument of \code{optim}.
+#' @param jacobian Jacobian of tx evaluated at MLE. If argument is \code{NULL},
+#' it will be computed numerically.
 #' @param object Result of \code{mle_optim} or \code{txform}
-#' @param x 
-#' @param parm 
-#' @param level 
-#' @param k 
+#' @param x Result of \code{mle_optim} or \code{txform}.
+#' @param k penalty parameter; the default \code{k = 2} gives AIC.
+#' @param value a character vector.
 #' @param ... Additional arguments
 #' 
 #' @examples
@@ -178,8 +181,8 @@ txform.mle_optim = function(object, tx, jacobian = NULL, ...)
 	if (is.null(jacobian)) {
 		J_tx = numDeriv::jacobian(tx, par)
 	} else {
-		stopifnot(nrow(jac_tx) == length(par_tx))
-		stopifnot(ncol(jac_tx) == length(par))
+		stopifnot(nrow(J_tx) == length(par_tx))
+		stopifnot(ncol(J_tx) == length(par))
 		J_tx = jacobian
 	}
 	V_tx = J_tx %*% V_par %*% t(J_tx)

@@ -8,9 +8,9 @@
 \method{print}{mle_optim_ci}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{An object of class \code{mle_optim_ci}}
 
-\item{...}{}
+\item{...}{Additional arguments}
 }
 \description{
 MLE Optimization Confidence Intervals

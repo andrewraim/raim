@@ -10,8 +10,8 @@
 #' @param sigma Scale parameter
 #' @param lower.tail Logical; if \code{TRUE} (default), probabilities are
 #' \eqn{P[X \leq x]} otherwise, \eqn{P[X > x]}.
-#' @param log.p Logical; if TRUE, probabilities p are given as log(p)
-#' @param log Logical; if TRUE, probabilities p are given as log(p)
+#' @param log.p Logical; if \code{TRUE}, probabilities p are given as \eqn{log(p)}
+#' @param log Logical; if \code{TRUE}, probabilities p are given as \eqn{log(p)}
 #' 
 #' @return A vector of draws
 #' 

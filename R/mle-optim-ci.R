@@ -1,7 +1,7 @@
 #' MLE Optimization Confidence Intervals
 #' 
-#' @param x 
-#' @param ... 
+#' @param x An object of class \code{mle_optim_ci}
+#' @param ... Additional arguments
 #'
 #' @name mle_optim_ci
 #' @export

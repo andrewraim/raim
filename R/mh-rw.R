@@ -15,6 +15,8 @@
 #' @param thin Thinning factor; the period for saving draws
 #' @param report_period Period for reporting MCMC progress
 #' @param tx A transformation of the parameter \eqn{\phi}
+#' @param level Nominal confidence level for intervals
+#' @param value a character vector.
 #' @param ... Additional arguments
 #' @param x Object to print
 #' @param object Result of \code{mh_rw} or \code{txform}

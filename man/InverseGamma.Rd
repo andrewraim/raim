@@ -29,6 +29,9 @@ q_invgamma(p, a, b, lower.tail = TRUE, log.p = FALSE)
 
 \item{q}{Vector of quantiles.}
 
+\item{lower.tail}{logical; if TRUE (default), probabilities are
+\eqn{P(X \leq x)}; otherwise, \eqn{P(X > x)}.}
+
 \item{log.p}{If \code{TRUE}, input and output probabilities on the log-scale.}
 
 \item{p}{Vector of probabilities.}

@@ -6,7 +6,6 @@
 #' @param dt_fmt Format string which can be processed by \code{format.POSIXct}
 #' @param file A connection, or a character string naming the file to print to
 #' @param join A string to place between the timestamp and the message.
-#' @param x A numeric vector
 #' @param ... Additional arguments
 #' 
 #' @examples
@@ -41,3 +40,4 @@ fprintf = function(file, fmt, ...)
 {
 	cat(sprintf(fmt, ...), file = file)
 }
+

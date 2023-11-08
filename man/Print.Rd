@@ -23,8 +23,6 @@ fprintf(file, fmt, ...)
 \item{join}{A string to place between the timestamp and the message.}
 
 \item{file}{A connection, or a character string naming the file to print to}
-
-\item{x}{A numeric vector}
 }
 \description{
 Functions to print messages using an \code{sprintf} syntax.

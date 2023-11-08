@@ -55,9 +55,13 @@ See details.}
 
 \item{object}{Result of \code{mh_rw} or \code{txform}}
 
+\item{level}{Nominal confidence level for intervals}
+
 \item{...}{Additional arguments}
 
 \item{x}{Object to print}
+
+\item{value}{a character vector.}
 
 \item{tx}{A transformation of the parameter \eqn{\phi}}
 }

@@ -3,12 +3,19 @@
 #' Functions to truncate a given univariate distribution to an interval of the
 #' form \eqn{(\text{lo}, \text{hi}]}.
 #'
-#' @param n Desired sample size
-#' @param lo Lower limit
-#' @param hi Upper limit
-#' @param pf Cumulative distribution function for the untruncated distribution
-#' @param qf Quantile function for the untruncated distribution
-#' @param ... Additional arguments
+#' @param n Desired sample size.
+#' @param x Quantile or argument of density.
+#' @param log logical; if \code{TRUE}, probabilities \code{p} are given as
+#' \eqn{\log(p)}.
+#' @param log.p logical; if \code{TRUE}, probabilities \code{p} are given as
+#' \eqn{\log(p)}.
+#' @param p Probability.
+#' @param lo Lower limit.
+#' @param hi Upper limit.
+#' @param df Density function for the untruncated distribution.
+#' @param pf Cumulative distribution function for the untruncated distribution.
+#' @param qf Quantile function for the untruncated distribution.
+#' @param ... Additional arguments.
 #' 
 #' @details
 #' This code was initially copied from the \link[LearnBayes]{rtruncated}

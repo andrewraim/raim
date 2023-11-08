@@ -2,7 +2,7 @@
 #' 
 #' These methods operate on results of \code{txform} from \code{mle_optim}.
 #'
-#' @param object Object to pprint
+#' @param object Object to print
 #' @param x Object to operate on
 #' @param value Vector of new parameter names
 #' @param ... Additional arguments

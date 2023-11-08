@@ -17,17 +17,29 @@ q_truncated(p, lo, hi, pf, qf, log.p = FALSE, ...)
 r_truncated(n, lo, hi, pf, qf, ...)
 }
 \arguments{
-\item{lo}{Lower limit}
+\item{x}{Quantile or argument of density.}
 
-\item{hi}{Upper limit}
+\item{lo}{Lower limit.}
 
-\item{pf}{Cumulative distribution function for the untruncated distribution}
+\item{hi}{Upper limit.}
 
-\item{...}{Additional arguments}
+\item{df}{Density function for the untruncated distribution.}
 
-\item{qf}{Quantile function for the untruncated distribution}
+\item{pf}{Cumulative distribution function for the untruncated distribution.}
 
-\item{n}{Desired sample size}
+\item{log}{logical; if \code{TRUE}, probabilities \code{p} are given as
+\eqn{\log(p)}.}
+
+\item{...}{Additional arguments.}
+
+\item{log.p}{logical; if \code{TRUE}, probabilities \code{p} are given as
+\eqn{\log(p)}.}
+
+\item{p}{Probability.}
+
+\item{qf}{Quantile function for the untruncated distribution.}
+
+\item{n}{Desired sample size.}
 }
 \description{
 Functions to truncate a given univariate distribution to an interval of the

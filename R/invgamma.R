@@ -6,6 +6,8 @@
 #' @param p Vector of probabilities.
 #' @param a Shape parameter.
 #' @param b Rate parameter.
+#' @param lower.tail logical; if TRUE (default), probabilities are
+#' \eqn{P(X \leq x)}; otherwise, \eqn{P(X > x)}.
 #' @param log If \code{TRUE}, return densities and probabilities on the log-scale.
 #' @param log.p If \code{TRUE}, input and output probabilities on the log-scale.
 #'

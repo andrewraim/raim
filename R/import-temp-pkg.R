@@ -22,13 +22,17 @@
 #' @export
 import_temp_pkg = function(src_files, pkg_name, unlink_on_exit = TRUE)
 {
-	require(devtools)
+	if (!requireNamespace("devtools", quietly = TRUE)) {
+		warning("The devtools package is required for this functionality")
+		return(NULL)
+	}
+
 	dd = tempdir()
 	if (unlink_on_exit) {
 		on.exit(unlink(file.path(dd, pkg_name), recursive = TRUE))
 	}
 	package.skeleton(name = pkg_name, path = dd, code_files = src_files)
-	load_all(file.path(dd, pkg_name))
+	devtools::load_all(file.path(dd, pkg_name))
 	return(invisible(dd))
 }
 

@@ -9,6 +9,7 @@
 #' @param Sigma_chol Cholesky factor of covariance matrix parameter.
 #' @param Omega Precision matrix parameter.
 #' @param log If \code{TRUE}, return densities and probabilities on the log-scale.
+#' @param tol Cutoff for eigenvalues. See details.
 #'
 #' @return
 #' \code{dmvnorm} gives the density using specified covariance matrix,
@@ -22,6 +23,12 @@
 #' A use case for the function \code{r_singular_mvnorm} would be to start with
 #' a singular precision matrix \code{Q}, and use something like
 #' \code{Sigma = ginverse(Q)} as the covariance matrix.
+#'
+#' The argument \code{tol} is used with singular normal; only eigenvalues
+#' greater than \code{tol} are used in the pseudo-inverse. Furthermore, if
+#' eigenvalues smaller than \code{-tol} are present, an error is thrown.
+#' Negative eigevalues should only be present due to numerical error, as the
+#' precision matrix should be positive semidefinite.
 #'
 #' @name MultivariateNormal
 NULL
@@ -56,9 +63,9 @@ r_mvnorm_prec = function(n, mu, Omega)
 	Z = matrix(rnorm(n*k), k, n)
 
 	# Compute A such that Omega = A %*% t(A)
-	if (isDiagonal(Omega)) {
+	if (Matrix::isDiagonal(Omega)) {
 		idx = cbind(seq_len(k), seq_len(k))
-		A = Diagonal(x = Omega[idx]^(1/2))
+		A = Matrix::Diagonal(x = Omega[idx]^(1/2))
 	} else if (is(Omega, 'sparseMatrix')) {
 		A = chol(Omega)
 	} else {

@@ -13,3 +13,4 @@ laplace_approx = function(log_post, mode, Data, optim_control = list(),
 	list(mode = mode, var = H, int = int, converge = (fit$convergence == 0),
 		optim.out = fit)
 }
+

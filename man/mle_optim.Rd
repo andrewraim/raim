@@ -54,7 +54,17 @@ mle_optim(
 \method{parnames}{mle_optim}(object) <- value
 }
 \arguments{
+\item{method}{Passed to \code{method} argument of \code{optim}.}
+
+\item{gr}{Passed to \code{gr} argument of \code{optim}.}
+
+\item{lower}{Passed to \code{lower} argument of \code{optim}.}
+
+\item{upper}{Passed to \code{upper} argument of \code{optim}.}
+
 \item{control}{Object created via \code{mle_optim_control} function.}
+
+\item{hessian}{Passed to \code{hessian} argument of \code{optim}.}
 
 \item{init}{Initial value of \eqn{\phi} for the sampler}
 
@@ -73,23 +83,18 @@ fixed at their \code{init} values during optimization.}
 
 \item{object}{Result of \code{mle_optim} or \code{txform}}
 
-\item{tx}{A transformation of the parameter \eqn{\phi}}
+\item{tx}{A transformation of the parameter \eqn{\phi}.}
 
-\item{jacobian}{}
+\item{jacobian}{Jacobian of tx evaluated at MLE. If argument is \code{NULL},
+it will be computed numerically.}
 
 \item{...}{Additional arguments}
 
-\item{x}{}
+\item{x}{Result of \code{mle_optim} or \code{txform}.}
 
-\item{k}{}
+\item{k}{penalty parameter; the default \code{k = 2} gives AIC.}
 
-\item{optim_method}{A \code{method} argument to pass to \code{optim}}
-
-\item{optim_control}{A \code{control} argument to pass to \code{optim}}
-
-\item{parm}{}
-
-\item{level}{}
+\item{value}{a character vector.}
 }
 \description{
 MLE Optimization
