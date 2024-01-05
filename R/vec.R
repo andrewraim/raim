@@ -1,3 +1,23 @@
+#' na
+#' 
+#' Create a vector of NA values.
+#'
+#' @param length A non-negative integer specifying the desired length.
+#' @param type A string matching one of: \code{character}, \code{complex},
+#' \code{integer}, or \code{real}
+#'
+#' @export
+na = function(length, type = c("real", "integer", "complex", "character"))
+{
+	type = match.arg(type)
+	
+	switch(type,
+		real = rep(NA_real_, length),
+		integer = rep(NA_integer_, length),
+		complex = rep(NA_complex_, length),
+		character  = rep(NA_character_, length))
+}
+
 #' Sequence
 #'
 #' @param x A matrix, array, or other object which \eqn{dim} can operate on.
