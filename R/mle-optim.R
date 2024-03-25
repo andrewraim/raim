@@ -200,6 +200,7 @@ txform.mle_optim = function(object, tx, jacobian = NULL, ...)
 }
 
 # TBD: this needs to be updated or removed
+if (FALSE)
 confint.mle_optim = function(object, parm, level = 0.95, ...)
 {
 	dim_theta = length(unlist(object$theta_hat))
