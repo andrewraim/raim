@@ -1,8 +1,10 @@
 #ifndef RAIM_H
 #define RAIM_H
 
-#include "which.h"
-#include "logger.h"
+#include "concat.h"
 #include "log-sum-exp.h"
+#include "logger.h"
+#include "order.h"
+#include "which.h"
 
 #endif
