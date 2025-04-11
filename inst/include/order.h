@@ -1,5 +1,5 @@
-#ifndef WHICH_H
-#define WHICH_H
+#ifndef ORDER_H
+#define ORDER_H
 
 #include <Rcpp.h>
 

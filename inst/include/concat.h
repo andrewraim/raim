@@ -1,12 +1,11 @@
-#ifndef WHICH_H
-#define WHICH_H
+#ifndef CONCAT_H
+#define CONCAT_H
 
 #include <Rcpp.h>
 
 namespace raim {
 
-Rcpp::NumericVector concat(const Rcpp::NumericVector& x, const Rcpp::Nume
-ricVector& y)
+Rcpp::NumericVector concat(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y)
 {
 	unsigned int m = x.size();
 	unsigned int n = y.size();
