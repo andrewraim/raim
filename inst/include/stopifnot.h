@@ -20,14 +20,14 @@ void stopifnot(bool cond, const char* format, ...)
 			Rcpp::stop("Could not format error message");
 		}
 
-		Rcpp::stop("Error: %s is not TRUE", msg);
+		Rcpp::stop("%s is not TRUE", msg);
 	}
 }
 
 void stopifnot(bool cond)
 {
 	if (!cond) {
-		Rcpp::stop("Error: condition is not TRUE");
+		Rcpp::stop("condition is not TRUE");
 	}
 }
 

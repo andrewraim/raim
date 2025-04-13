@@ -9,7 +9,23 @@
 
 namespace raim {
 
-double log_sum_exp(const Rcpp::NumericVector& x)
+inline double log_add2_exp(double x, double y)
+{
+	double s = std::min(x,y);
+	double t = std::max(x,y);
+	return t + std::log1p(exp(s - t));
+}
+
+inline double log_sub2_exp(double x, double y)
+{
+	if (std::isinf(x) && std::isinf(y) && x < 0 && y < 0) {
+		return R_NegInf;
+	}
+
+	return x + std::log1p(-exp(y - x));
+}
+
+inline double log_sum_exp(const Rcpp::NumericVector& x)
 {
     unsigned int k = x.size();
 
@@ -27,7 +43,7 @@ double log_sum_exp(const Rcpp::NumericVector& x)
     return s;
 }
 
-Rcpp::NumericVector log_sum_exp_mat(const Rcpp::NumericMatrix& x)
+inline Rcpp::NumericVector log_sum_exp_mat(const Rcpp::NumericMatrix& x)
 {
     unsigned int n = x.nrow();
     Rcpp::NumericVector out(n);
@@ -39,14 +55,16 @@ Rcpp::NumericVector log_sum_exp_mat(const Rcpp::NumericMatrix& x)
     return out;
 }
 
-Rcpp::NumericVector log_add2_exp(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y)
+inline Rcpp::NumericVector log_add2_exp(const Rcpp::NumericVector& x,
+	const Rcpp::NumericVector& y)
 {
 	const Rcpp::NumericVector& s = Rcpp::pmin(x,y);
 	const Rcpp::NumericVector& t = Rcpp::pmax(x,y);
 	return  t + Rcpp::log1p(exp(s - t));
 }
 
-Rcpp::NumericVector log_sub2_exp(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y)
+inline Rcpp::NumericVector log_sub2_exp(const Rcpp::NumericVector& x,
+	const Rcpp::NumericVector& y)
 {
 	return x + Rcpp::log1p(-exp(y - x));
 }
@@ -54,3 +72,4 @@ Rcpp::NumericVector log_sub2_exp(const Rcpp::NumericVector& x, const Rcpp::Numer
 }
 
 #endif
+
