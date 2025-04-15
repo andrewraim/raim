@@ -5,7 +5,8 @@
 
 namespace raim {
 
-Rcpp::NumericVector concat(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y)
+inline Rcpp::NumericVector concat(const Rcpp::NumericVector& x,
+	const Rcpp::NumericVector& y)
 {
 	unsigned int m = x.size();
 	unsigned int n = y.size();

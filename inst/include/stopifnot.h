@@ -5,7 +5,7 @@
 
 namespace raim {
 
-void stopifnot(bool cond, const char* format, ...)
+inline void stopifnot(bool cond, const char* format, ...)
 {
 	if (!cond) {
 		// const std::string& msg = Rcpp::sprintf(format, ...);
@@ -24,7 +24,7 @@ void stopifnot(bool cond, const char* format, ...)
 	}
 }
 
-void stopifnot(bool cond)
+inline void stopifnot(bool cond)
 {
 	if (!cond) {
 		Rcpp::stop("condition is not TRUE");

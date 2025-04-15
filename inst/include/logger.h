@@ -10,7 +10,7 @@ namespace raim {
 * general function, but initial attempts to do this seem to be messing up the
 * variable argument construct.
 */
-int logger(const char* fmt, ...)
+inline int logger(const char* fmt, ...)
 {
 	// Print time and separator
 	time_t timer;
@@ -31,7 +31,7 @@ int logger(const char* fmt, ...)
 	return out;
 }
 
-int logger(const char* dt_fmt, const char* sep, const char* fmt, ...)
+inline int logger(const char* dt_fmt, const char* sep, const char* fmt, ...)
 {
 	// Print time and separator
 	time_t timer;
@@ -55,3 +55,4 @@ int logger(const char* dt_fmt, const char* sep, const char* fmt, ...)
 }
 
 #endif
+
